@@ -1,0 +1,156 @@
+.security {
+  flex: 1;
+}
+
+.security h1 {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+.mainContentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+/* Tabs */
+.tabHeader {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.tabBtn {
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: 500;
+  color: #555;
+  transition: all 0.2s ease;
+}
+
+.tabBtn:hover {
+  color: #000;
+}
+
+.activeTab {
+  border-bottom: 2px solid #000;
+  color: #000;
+}
+.signInContent {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+/* Info Sections */
+.infoBlock {
+  margin-bottom: 32px;
+}
+
+.infoBlock h2 {
+  font-size: 23px;
+  margin-bottom: 6px;
+}
+.signInWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+.infoDesc {
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+/* Row inside info blocks */
+.infoRow {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  font-size: 14px;
+}
+.editInfoRow {
+  display: flex;
+  justify-content: space-between;
+}
+.label {
+  width: 180px;
+  color: var(--kds-color--color);
+}
+
+.value {
+  font-weight: bold;
+  color: var(--kds-color--color-active);
+}
+
+.verified {
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 5px;
+}
+
+.linkBtn {
+  background: none;
+  border: none;
+  color: var(--kds-color--color);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.linkBtn:hover {
+  color: var(--kds-color--color-active);
+}
+
+/* Device section */
+.deviceBlock {
+  margin-top: 15px;
+}
+
+.deviceTitle {
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-size: 15px;
+}
+
+.deviceList {
+  list-style: none;
+  padding-left: 0;
+  font-size: 14px;
+  color: var(--kds-color--color);
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding-left: 30px;
+}
+.resetPassword {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.resetPassword:hover {
+  color: var(--kds-color--color-active);
+}
+.deviceAddress {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.thirdPartyContent h2 {
+  font-size: 23px;
+}
+.thirdPartyContent p {
+  font-size: 15px;
+  color: var(--kds-color--color);
+}

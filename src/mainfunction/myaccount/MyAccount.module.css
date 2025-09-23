@@ -1,0 +1,68 @@
+.accountContainer {
+  display: flex;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  padding: 0 200px;
+  align-items: flex-start;
+  gap: 30px;
+  overflow-y: hidden;
+}
+
+/* Sidebar */
+.sidebarControl {
+  flex: 0 0 20%;
+  padding-top: 100px;
+  position: sticky;
+  top: 0;
+  overflow-y: hidden;
+}
+
+.sidebarControl ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  font-weight: 550;
+}
+
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: var(--kds-color--color);
+  flex-direction: row;
+  text-decoration: none;
+}
+.itemIcon {
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.sidebarControlItem.active .sidebarItem {
+  color: var(--kds-color--color-active);
+}
+.sidebarControlItem.active .itemIcon {
+  background: #f7f7f7;
+  color: var(--kds-color--color-active);
+}
+
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--kds-color--color);
+  flex-direction: row;
+  text-decoration: none;
+
+  /* thêm reset cho button */
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+}

@@ -1,0 +1,57 @@
+.checkEmail {
+  max-width: 600px;
+  margin: 100px auto;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #000;
+}
+
+h2 {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 14px;
+  color: #444;
+  margin: 8px 0;
+}
+
+.highlight {
+  font-weight: 600;
+  color: #000;
+}
+
+.btnResend {
+  margin-top: 25px;
+  padding: 12px 30px;
+  background-color: #f2f2f2;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btnResend:hover {
+  background-color: #e5e5e5;
+}
+
+.footer {
+  margin-top: 80px;
+  font-size: 12px;
+  color: #666;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.footer a {
+  text-decoration: none;
+  color: #666;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}

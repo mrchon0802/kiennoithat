@@ -1,0 +1,78 @@
+/* Main Content */
+.mainContent {
+  flex: 1 1 80%;
+  padding: 40px;
+}
+
+.mainContent h2 {
+  margin-bottom: 40px;
+}
+
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  max-width: calc(280px * 3 + 40px); /* 3 card + 2 gap (20px * 2) */
+  margin: 0 auto;
+  gap: 20px;
+}
+
+.productCard {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.productCard img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+}
+
+.productCard img.grayscale {
+  filter: grayscale(100%);
+}
+
+.cardContent {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.transformDate {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 13px;
+}
+.orderDate {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+.orderPrice {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+.orderAction {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.viewDetail {
+  color: var(--kds-color--color-active);
+  font-size: 15px;
+  font-weight: 550;
+}
+.cancelOrder {
+  font-size: 13px;
+  color: var(--kds-color--color);
+}

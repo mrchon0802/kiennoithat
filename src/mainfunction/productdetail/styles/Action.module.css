@@ -1,0 +1,36 @@
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 15px;
+  box-shadow: -5px 0 8px rgba(161, 161, 161, 0.1),
+    /* bên trái */ 5px 0 8px rgba(161, 161, 161, 0.1),
+    /* bên phải */ 0 -5px 8px rgba(161, 161, 161, 0.1);
+  padding: 20px;
+  position: absolute;
+  bottom: 0;
+  background: white;
+  z-index: 10;
+  left: 0;
+  /* width: 100%; */
+  right: 0;
+}
+.actionSection {
+  color: var(--kds-color--color);
+  font-size: 25px;
+}
+.orderBtn {
+  background: #3e6ae1;
+  padding: 14px 20px;
+  border: none;
+  outline: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  .action {
+    left: 0;
+    right: 0; /* full width, bỏ khoảng cách */
+  }
+}

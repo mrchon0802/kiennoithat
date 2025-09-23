@@ -1,0 +1,14 @@
+html,
+body {
+  height: 100vh;
+  overflow: auto;
+}
+.homePage {
+  width: 100%;
+  min-height: 100vh; /* đảm bảo full màn hình */
+  overflow: auto;
+  display: block;
+  flex-direction: column;
+  font-family: sans-serif;
+  flex-grow: 1;
+}

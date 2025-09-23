@@ -1,0 +1,168 @@
+.formContainer {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  width: 100%;
+  max-width: 350px;
+  margin: 30px auto;
+  padding: 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.formTitle {
+  font-weight: bold;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+.formTitle h2 {
+  font-size: 35px;
+}
+.loginFormContiner {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.formGroup {
+  position: relative;
+  text-align: left;
+  margin-bottom: 10px;
+}
+.formGroup label {
+  font-size: 14px;
+  display: block;
+  margin-bottom: 7px;
+  color: var(--kds-color--color);
+  font-weight: 550;
+}
+.changeEmail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--kds-color--color);
+}
+.changeEmail button {
+  background: white;
+  border: none;
+  outline: none;
+  color: var(--kds-color--color);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.changeEmail p {
+  color: var(--kds-color--color);
+  text-align: left;
+  font-size: 15px;
+  font-weight: 550;
+  margin-bottom: 10px;
+}
+.errorBox {
+  display: flex;
+  font-size: 14px;
+  padding: 20px 10px;
+  justify-content: space-between;
+  align-items: center;
+  align-items: center;
+  border-radius: 4px;
+  background-color: #eee;
+  color: rgb(231, 169, 52);
+  font-weight: bold;
+}
+
+.emailLogin p {
+  color: var(--kds-color--color);
+  text-align: left;
+  font-size: 15px;
+  font-weight: 550;
+  margin-bottom: 10px;
+}
+.inputBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #eee;
+  border-radius: 4px;
+  padding-right: 10px;
+}
+
+.inputBox input {
+  width: 100%;
+  padding: 13px 10px;
+  border: 1px solid #ccc;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background: transparent;
+}
+.inputBox button {
+  border: none;
+  outline: none;
+  background: transparent;
+}
+.btn {
+  padding: 13px 10px;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 550;
+  width: 100%;
+  cursor: pointer;
+}
+.nextBtnStep {
+  color: white;
+  background-color: var(--kds-color--button-bg);
+  pointer-events: none;
+  border: none;
+  border-radius: 4px;
+  opacity: 0.5;
+}
+.stepOneNextBtn.active {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.stepOneNextBtn:hover {
+  background: var(--kds-color--button-bg-active);
+}
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid #ccc;
+}
+
+.divider span {
+  margin: 0 10px;
+  font-size: 12px;
+  color: #666;
+}
+.formLinks {
+  margin: 10px 0;
+}
+
+.formLinks a {
+  font-size: 13px;
+  color: var(--kds-color--color);
+  text-decoration: underline;
+  font-weight: 550;
+}
+.formDirect {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.createAccountBtn {
+  font-weight: 550;
+  color: var(--kds-color--color);
+}

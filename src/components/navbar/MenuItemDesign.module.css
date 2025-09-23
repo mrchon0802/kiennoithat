@@ -1,0 +1,26 @@
+.menuItem {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.itemImage {
+  width: 170px;
+  height: 170px;
+  border-radius: 8px;
+}
+.itemImage img {
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.itemTitleDesign a {
+  font-weight: 600;
+  color: var(--kds-color--color-active);
+}
+.itemTitleDesign a:hover {
+  color: var(--kds-color--color-active);
+  background: white;
+}

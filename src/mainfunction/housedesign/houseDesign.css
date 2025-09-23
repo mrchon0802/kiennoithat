@@ -1,0 +1,50 @@
+.kds-house-design {
+  display: flex; /* cho 2 div nằm ngang */
+  width: 100%; /* chiếm hết chiều rộng màn hình */
+  height: 260px; /* chiều cao 220px */
+  padding: 40px;
+  gap: 30px;
+  overflow: hidden;
+}
+
+.kds-hds {
+  flex: 1; /* mỗi item chiếm 50% */
+  display: flex;
+  flex-direction: row; /* nội dung xếp dọc */
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  box-sizing: border-box;
+  padding: 20px 40px;
+  overflow: hidden;
+  border-radius: 12px;
+  background-color: #f4f4f4;
+}
+
+.design-image {
+  width: 180px;
+  height: 180px;
+  overflow: hidden;
+}
+.design-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.module-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+.order-design-btn {
+  padding: 10px 25px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  font-weight: 570;
+  color: var(--kds-color-color);
+  background: white;
+}

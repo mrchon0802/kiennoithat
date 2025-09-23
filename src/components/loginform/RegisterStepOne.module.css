@@ -1,0 +1,93 @@
+.formContainer {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  width: 100%;
+  max-width: 350px;
+  margin: 30px auto;
+  padding: 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+.formTitle {
+  font-size: 22px;
+  font-weight: bold;
+
+  text-align: left;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+.formTitle h2 {
+  font-size: 35px;
+}
+.stepRegister {
+  font-size: 13px;
+  color: var(--kds-color--color);
+}
+.formGroup {
+  position: relative;
+  text-align: left;
+  margin-bottom: 10px;
+}
+.inputBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.formGroup label {
+  font-size: 14px;
+  display: block;
+  margin-bottom: 7px;
+  color: var(--kds-color--color);
+  font-weight: 550;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 13px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background-color: #eee;
+}
+.termsAndConditions {
+  font-size: 12px;
+  color: var(--kds-color--color);
+  text-align: left;
+}
+.terms {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.terms:hover {
+  color: var(--kds-color--color-active);
+}
+.btn {
+  padding: 13px 10px;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 550;
+  width: 100%;
+  cursor: pointer;
+}
+.nextBtnStep {
+  color: white;
+  background-color: var(--kds-color--button-bg);
+  pointer-events: none;
+  border: none;
+  border-radius: 4px;
+  opacity: 0.5;
+}
+.stepOneNextBtn.active {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.stepOneNextBtn:hover {
+  background: var(--kds-color--button-bg-active);
+}

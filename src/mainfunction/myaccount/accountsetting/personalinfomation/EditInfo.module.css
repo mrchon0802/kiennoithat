@@ -1,0 +1,103 @@
+.editInfo {
+  max-width: 800px;
+  margin: 50px auto;
+  font-family: Arial, sans-serif;
+  color: #000;
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  color: var(--kds-color--color);
+  font-weight: bold;
+}
+.backBtn:hover {
+  color: var(--kds-color--color-active);
+}
+.editInfo h2 {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.formRow {
+  display: flex;
+  gap: 20px;
+}
+
+.formGroup {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  outline: none;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--kds-color--color);
+}
+
+.input,
+.select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #eee;
+  color: var(--kds-color--color);
+}
+.select {
+  background: #eee !important;
+}
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: #aaa;
+}
+
+.formActions {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btnUpdate {
+  padding: 15px 32px;
+  background-color: var(--kds-color--button-bg);
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.btnUpdate.active {
+  opacity: 1;
+}
+.formActions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 30px;
+}
+.btnCancel {
+  background: none;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: bold;
+  color: var(--kds-color--color);
+}

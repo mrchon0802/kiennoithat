@@ -1,0 +1,12 @@
+.total-material {
+  font-size: 15px;
+  margin-top: 20px;
+}
+.total-material ul {
+  list-style-type: "- ";
+  padding-left: 10px;
+  color: var(--kds-color--color);
+}
+.total-material li {
+  margin-bottom: 5px;
+}

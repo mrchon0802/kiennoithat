@@ -1,0 +1,36 @@
+.productInfo h1 {
+  text-align: center;
+  /* margin-top: 60px; */
+}
+.widthDetail {
+  margin-top: 30px;
+}
+.widthOption {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  gap: 5px;
+}
+.widthOption button {
+  flex: 1;
+  padding: 15px 20px;
+  border-radius: 5px;
+  background: transparent;
+  border: 1px solid var(--kds-color--grey45);
+  color: var(--kds-color--color);
+  cursor: pointer;
+  font-size: 15px;
+}
+.widthOption button.active {
+  background: var(--kds-color--bg-active);
+  color: var(--kds-color--color-active);
+  border: 1px solid var(--kds-color--color-active);
+}
+.totalSize {
+  font-size: 15px;
+}
+.totalDetail {
+  color: var(--kds-color--color);
+}

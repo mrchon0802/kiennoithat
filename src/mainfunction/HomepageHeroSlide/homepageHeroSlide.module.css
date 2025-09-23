@@ -1,0 +1,142 @@
+.homepageHeroSlide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+  /* overflow: auto; */
+  /* margin-top: 10px; */
+}
+.carouselViewport {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 675px;
+}
+.panelList {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.productCardHeroSlide {
+  width: 100vw;
+  height: 675px;
+  flex-shrink: 0;
+  opacity: 0;
+  position: absolute;
+  z-index: 0;
+  transition: opacity 0.9s ease-in-out;
+}
+.productCardHeroSlide.active {
+  opacity: 1; /* hiện khi active */
+  z-index: 1;
+}
+.reactImage {
+  width: 100%;
+  height: 100%;
+}
+.reactImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.moduleContent {
+  position: absolute;
+  left: 0;
+  top: 50px;
+  width: 100%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 50px;
+  gap: 15px;
+}
+.slideTitle h1 {
+  font-size: 55px;
+  color: white;
+  text-shadow: -5px 5px 2px rgba(0, 0, 0, 0.1);
+}
+.componentHeading span {
+  color: white;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  font-weight: 500;
+  font-size: 18px;
+}
+.buttonGroup {
+  display: flex;
+  gap: 8px;
+}
+.buttonGroup a {
+  cursor: pointer;
+  padding: 12px 50px;
+  display: block;
+  font-weight: 600;
+  font-size: 15px;
+  border: none;
+  outline: none;
+  border-radius: 7px;
+  background: var(--kds-color--button-bg);
+}
+.buttonGroup a {
+  text-decoration: none;
+  color: white;
+}
+.orderNowBtn {
+  background: var(--kds-color--button-bg);
+}
+.viewDetailBtn {
+  background: white !important;
+  color: var(--kds-color--color) !important;
+}
+
+button.viewDetailBtn a {
+  color: var(--kds-color--color) !important;
+}
+.control {
+  position: absolute;
+  top: 50%;
+  font-size: 20px;
+  color: var(--kds-color--color);
+  cursor: pointer;
+  z-index: 10;
+  width: 50px;
+  height: 50px;
+  background: hsla(0, 0%, 100%, 0.55);
+  border-radius: 7px;
+  border: none;
+  outline: none;
+}
+.prevBtn {
+  left: 50px;
+}
+.nextBtn {
+  right: 50px;
+}
+.carouselModalTabList {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 20px;
+  z-index: 10;
+}
+.kdsTabList {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ccc;
+  cursor: pointer;
+}
+.dot.active {
+  background-color: white;
+}

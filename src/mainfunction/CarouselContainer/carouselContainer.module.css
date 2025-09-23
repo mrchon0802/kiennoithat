@@ -1,0 +1,110 @@
+.carouselContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.carouselViewport {
+  position: relative;
+  width: 100vw;
+  overflow-x: hidden;
+  /* overflow-y: auto; */
+  padding: 40px;
+}
+.panelList {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.5s ease-in-out;
+}
+.productCardCarouselSlide {
+  position: relative;
+  width: 1024px;
+  height: 580px;
+  flex-shrink: 0;
+  overflow: hidden;
+  /* margin: 0 30px; */
+  border-radius: 12px;
+}
+
+.reactImage {
+  width: 100%;
+  height: 100%;
+}
+.reactImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.moduleContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: 50px;
+  gap: 20px;
+}
+.slideTitle h1 {
+  color: white;
+  font-size: 47px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.buttonGroup {
+  display: flex;
+  gap: 10px;
+}
+.buttonGroup button {
+  padding: 12px 32px;
+  font-size: 15px;
+  border-radius: 5px;
+  font-weight: 550;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+.orderNowBtn {
+  background: #3e6ae1;
+  color: white;
+}
+.orderNowBtn:hover {
+  background: var(--kds-color--button-bg-active);
+}
+.orderNowBtn a {
+  text-decoration: none;
+  color: white;
+}
+.learnMoreBtn {
+  color: var(--kds-color--color);
+}
+.learnMoreBtn:hover {
+  background: #eee;
+}
+.carouselModalTabList {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  z-index: 10;
+}
+.kdsTabList {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ccc;
+  cursor: pointer;
+}
+.dot.active {
+  background-color: #333;
+}

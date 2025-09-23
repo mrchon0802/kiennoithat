@@ -1,0 +1,31 @@
+:root {
+  --kds-color--blue30: #3e6ae1;
+  --kds-color--blue10: #2e4994;
+  --kds-color--blue20: #3457b1;
+  --kds-color--blue30: #3e6ae1;
+  --kds-color--green: #12bb00;
+  --kds-color--grey10: #171a20;
+  --kds-color--grey15: #222;
+  --kds-color--grey20: #393c41;
+  --kds-color--grey25: #444;
+  --kds-color--grey30: #5c5e62;
+  --kds-color--grey35: #8e8e8e;
+  --kds-color--grey40: #a2a3a5;
+  --kds-color--grey45: #bbb;
+  --kds-color--grey50: #d0d1d2;
+  --kds-color--grey60: #e2e3e3;
+  --kds-color--grey65: #eee;
+  --kds-color--grey70: #f4f4f4;
+  --kds-color--red10: #b74134;
+  --kds-color--red20: #ed4e3b;
+  --kds-color--white: #fff;
+  --kds-color--yellow: #fbb01b;
+  --kds-color--black-bg: #0000001a;
+  --kds-color--color: #5c5e62;
+  --kds-color--color-active: #171a20;
+  --kds-color--border: #5c5e62;
+  --kds-color--border-active: #0000001a;
+  --kds-color--bg-active: #eee;
+  --kds-color--button-bg: #3e6ae1;
+  --kds-color--button-bg-active: #3457b1;
+}
