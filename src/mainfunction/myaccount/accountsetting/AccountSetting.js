@@ -1,6 +1,6 @@
 import { User, Lock, Shield, Settings } from "lucide-react";
 import Link from "next/link";
-import styles from "./accountSetting.module.css";
+import styles from "./AccountSetting.module.css";
 import clsx from "clsx";
 
 export default function AccountSetting({ children }) {
@@ -70,7 +70,7 @@ export default function AccountSetting({ children }) {
           <input type="radio" name="mfa" />
           <div>
             <strong>Cài đặt Xác thực đa yếu tố </strong>
-            <p>
+            <p className={styles.checkupItemText}>
               Bảo vệ tài khoản của bạn bằng cách yêu cầu một hình thức xác minh
               thứ hai trước khi đăng nhập
             </p>
@@ -81,14 +81,18 @@ export default function AccountSetting({ children }) {
         <div className={styles.checkupItem}>
           <input type="radio" name="mfa" />
           <div>
-            <strong>Thêm Email khôi phục</strong>
+            <strong className={styles.checkupItemStrong}>
+              Thêm Email khôi phục
+            </strong>
           </div>
         </div>
 
         <div className={clsx(styles.checkupItem, styles.verified)}>
-          <span>✔</span>
+          <span className={styles.checkupItemSpan}>✔</span>
           <div>
-            <strong>Email đã xác minh</strong>
+            <strong className={styles.checkupItemStrong}>
+              Email đã xác minh
+            </strong>
           </div>
         </div>
       </aside>

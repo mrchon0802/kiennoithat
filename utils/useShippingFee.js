@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getShippingFee } from "@/utils/ghnApi"; // chỗ bạn để hàm GHN
+import { getShippingFee } from "./ghnApi"; // chỗ bạn để hàm GHN
 
 export function useShippingFee({
   fromDistrictId,
