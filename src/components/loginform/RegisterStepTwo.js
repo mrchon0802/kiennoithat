@@ -7,7 +7,6 @@ import { useState } from "react";
 import clsx from "clsx";
 import { Eye, EyeOff } from "lucide-react";
 import styles from "./RegisterStepTwo.module.css";
-import { validateEmail, validatePassword } from "../../../utils/validator";
 import {
   Box,
   TextField,

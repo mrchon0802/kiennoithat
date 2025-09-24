@@ -30,7 +30,7 @@ export default function WarrantyRequest() {
     if (!productId || !currentProduct) {
       router.push("/my-account/my-product");
     }
-  }, [productId, currentProduct, router.push]);
+  }, [productId, currentProduct, router]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

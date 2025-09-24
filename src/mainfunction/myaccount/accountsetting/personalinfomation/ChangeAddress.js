@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import { updateUser } from "../../../../store/userSlice";
 import { login } from "../../../../store/loginSlice";
-import { getProvince, getDistrict, getWard } from "@/utils/ghnApi";
+import { getProvince, getDistrict, getWard } from "../../../../../utils/ghnApi";
 
 export default function ChangeAddress() {
   const dispatch = useDispatch();

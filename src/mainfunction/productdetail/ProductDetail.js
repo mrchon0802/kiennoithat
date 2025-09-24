@@ -86,7 +86,7 @@ function ProductDetail() {
         updateSelectingOrder({ price: finalPrice || currentProduct?.price })
       );
     }
-  }, [currentProduct, dispatch, updatePrice]);
+  }, [currentProduct, dispatch, updatePrice, finalPrice]);
   //hieu ung cho img
   const [imageSrc, setImageSrc] = useState(null);
   const [isFadingOut, setIsFadingOut] = useState(false);
@@ -107,7 +107,7 @@ function ProductDetail() {
       //trigger fade in
       setIsFadingOut(false);
     }, 400);
-  }, [activeSelectedColor, productOption]);
+  }, [activeSelectedColor, productOption, currentProduct]);
   const handleFeatureDetailOpen = () => {
     setIsFeatureDetailOpen(true);
   };

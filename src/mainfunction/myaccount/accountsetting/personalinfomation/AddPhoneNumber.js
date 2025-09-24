@@ -29,7 +29,7 @@ export default function AddPhoneNumber() {
     if (backupPhoneNumber.startsWith(countryCode)) {
       setBackupPhone(backupPhoneNumber.replace(countryCode, ""));
     }
-  }, [phoneNumber, backupPhoneNumber]);
+  }, [phoneNumber, backupPhoneNumber, countryCode]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

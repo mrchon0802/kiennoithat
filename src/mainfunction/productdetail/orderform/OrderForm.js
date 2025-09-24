@@ -33,7 +33,7 @@ function OrderForm({ productName, finalPrice }) {
       })
       .then((response) => setProvinceList(response.data.data || []))
       .catch((error) => console.error("Lỗi tải tỉnh: ", error));
-  }, []);
+  }, [TOKEN]);
   useEffect(() => {
     if (selectedProvince) {
       axios
@@ -49,7 +49,7 @@ function OrderForm({ productName, finalPrice }) {
         .then((response) => setDistrictList(response.data.data || []))
         .catch((error) => console.error("Lỗi tải huyện: ", error));
     }
-  }, [selectedProvince]);
+  }, [selectedProvince, TOKEN]);
   useEffect(() => {
     if (selectedDistrict) {
       axios
@@ -67,7 +67,7 @@ function OrderForm({ productName, finalPrice }) {
           console.error("Lỗi tải xã, phường: ", error);
         });
     }
-  }, [selectedDistrict]);
+  }, [selectedDistrict, TOKEN]);
   const handleToggle = (type) => {
     // event.preventDefault();
     setIsProvinceOpen(type === "province" ? !isProvinceOpen : false);

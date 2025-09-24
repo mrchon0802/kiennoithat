@@ -91,7 +91,7 @@ export default function PersonalInfomation({ children }) {
               className={clsx(styles.btn, styles.primaryPhoneNumberAddBtn)}
               onClick={() =>
                 router.push(
-                  "/account-settings/personal-infomation/add-phone-number"
+                  "/account-settings/personal-infomation/change-phone-number"
                 )
               }
             >
@@ -109,7 +109,7 @@ export default function PersonalInfomation({ children }) {
               className={clsx(styles.btn, styles.primaryPhoneNumberAddBtn)}
               onClick={() =>
                 router.push(
-                  "/account-settings/personal-infomation/add-phone-number"
+                  "/account-settings/personal-infomation/change-phone-number"
                 )
               }
             >

@@ -1,5 +1,3 @@
-import { headers } from "next/headers";
-
 const BASE_URL = "https://online-gateway.ghn.vn/shiip/public-api";
 const TOKEN = process.env.NEXT_PUBLIC_GHN_TOKEN;
 const SHOP_ID = process.env.NEXT_PUBLIC_GHN_SHOP_ID;

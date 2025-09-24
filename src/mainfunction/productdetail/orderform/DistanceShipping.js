@@ -76,7 +76,15 @@ function DistanceShipping({
       };
       fetchShipingFee();
     }
-  }, [addressDetail, ward, district, province, toDistrictId, toWardCode]);
+  }, [
+    addressDetail,
+    ward,
+    district,
+    province,
+    toDistrictId,
+    toWardCode,
+    shippingCostChange,
+  ]);
 
   return (
     <div className="distance-shipping">
