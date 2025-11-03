@@ -14,6 +14,7 @@ import { createOrder } from "@/store/orderSlice";
 import styles from "./Cart.module.css";
 import { Trash } from "lucide-react";
 import { debounce } from "lodash";
+import Image from "next/image";
 
 export default function Cart() {
   const router = useRouter();
@@ -180,10 +181,12 @@ export default function Cart() {
           <div key={`${item.productId}-${item.size}-${item.color}`}>
             <div className={styles.cardItem}>
               <div className={styles.card}>
-                <img
+                <Image
                   src={item.image}
                   alt={item.name}
                   className={styles.image}
+                  width={110}
+                  height={110}
                 />
 
                 <div className={styles.info}>

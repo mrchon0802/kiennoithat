@@ -14,9 +14,8 @@ export default function ChangePassword() {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const users = useSelector((state) => state.users.users);
-  const currentId = useSelector((state) => state.login.currentId);
-  const currentUser = users?.find((u) => u.id === currentId);
+  const currentUser = useSelector((state) => state.login.user);
+  const currentId = currentUser?._id;
   const currentPassword = currentUser?.password;
 
   const [currentPasswordInput, setCurrentPasswordInput] = useState("");
@@ -51,12 +50,15 @@ export default function ChangePassword() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    //check pass hien tai
     if (currentPasswordInput !== currentPassword) {
       setError((prev) => ({ ...prev, currentPassword: "Mật khẩu không đúng" }));
       return;
     }
+
     const passwordError = validatePassword(form.password);
     const confirmPasswordError =
       passwordError.length === 0 && form.confirmPassword !== form.password
@@ -70,8 +72,12 @@ export default function ChangePassword() {
     setError(newError);
     const noError = newError.password.length === 0 && !newError.confirmPassword;
     if (noError) {
-      dispatch(updateUser({ id: currentId, password: form.password }));
-      router.push("/account-settings/security");
+      try {
+        await dispatch(updateUser({ id: currentId, password: form.password }));
+        router.push("/account-settings/security");
+      } catch (err) {
+        console.error("Update failed", err);
+      }
     }
   };
 

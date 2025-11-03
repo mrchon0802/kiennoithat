@@ -68,7 +68,7 @@ function ProductDetail() {
     if (currentProduct?.colors?.length > 0 && !activeSelectedColor) {
       setActiveSelectedColor(currentProduct.colors[0]._id);
     }
-  }, [currentProduct, productId]);
+  }, [currentProduct, productId, activeSelectedColor]);
 
   //tinh gia bang usememo
   const finalPrice = useMemo(() => {
@@ -137,7 +137,13 @@ function ProductDetail() {
       color: selectedColor?.colorName || selectedColor?.name,
       quantity: 1,
     });
-  }, [currentProduct, activeSelectedSize, activeSelectedColor, finalPrice]);
+  }, [
+    currentProduct,
+    activeSelectedSize,
+    activeSelectedColor,
+    finalPrice,
+    fullSize,
+  ]);
 
   const handleFeatureDetailOpen = () => {
     setIsFeatureDetailOpen(true);
