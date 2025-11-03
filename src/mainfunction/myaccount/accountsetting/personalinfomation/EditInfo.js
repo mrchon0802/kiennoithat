@@ -3,33 +3,38 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser } from "../../../../store/userSlice";
-import { login } from "../../../../store/loginSlice";
+import { loginSuccess } from "../../../../store/loginSlice";
 import styles from "./EditInfo.module.css";
 import clsx from "clsx";
 import { ChevronLeft } from "lucide-react";
+import { userApi } from "@/api/userApi";
 
 export default function EditInfo() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const currentId = useSelector((state) => state.login.currentId);
-  const user = useSelector((state) => state.users.users);
-  const currentUser = user?.find((u) => u.id === currentId);
+  const currentUser = useSelector((state) => state.login.user);
 
-  const firstName = currentUser?.firstName || "";
-  const lastName = currentUser?.lastName || "";
+  //neu chua login thi login
+  useEffect(() => {
+    if (!currentUser) {
+      router.push("/auth");
+    }
+  }, [currentUser, router]);
 
   //set form dât bang du lieu redux
   const [formData, setFormData] = useState({
-    firstName: firstName || "",
-    lastName: lastName || "",
+    firstName: currentUser?.firstName || "",
+    lastName: currentUser?.lastName || "",
   });
 
   //khi component mount, dong bo du lieu redux -> form data
   useEffect(() => {
-    setFormData({ firstName: firstName || "", lastName: lastName || "" });
-  }, [firstName, lastName]);
+    setFormData({
+      firstName: currentUser?.firstName || "",
+      lastName: currentUser?.lastName || "",
+    });
+  }, [currentUser]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,7 +44,7 @@ export default function EditInfo() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     //luu thong tin da su vao redux store
 
@@ -48,15 +53,26 @@ export default function EditInfo() {
       return;
     }
 
-    dispatch(
-      updateUser({
-        id: currentUser.id,
+    try {
+      const updateUser = await userApi.update(currentUser._id, {
         firstName: formData.firstName,
         lastName: formData.lastName,
-      })
-    );
+      });
 
-    dispatch(login(currentUser.id));
+      dispatch(
+        loginSuccess({
+          user: updateUser.data,
+          token: localStorage.getItem("auth")
+            ? JSON.parse(localStorage.getItem("auth")).token
+            : null,
+        })
+      );
+
+      alert("update information succedd");
+      router.push("/account-settings/personal-infomation");
+    } catch (err) {
+      console.error("Error updating user information:", err);
+    }
 
     console.log("update info", formData);
     router.push("/account-settings/personal-infomation");

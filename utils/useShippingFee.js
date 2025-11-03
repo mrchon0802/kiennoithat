@@ -1,61 +1,34 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { getShippingFee } from "./ghnApi"; // chỗ bạn để hàm GHN
+import { useEffect, useState, useRef } from "react";
+import axios from "axios";
+import debounce from "lodash/debounce";
 
-export function useShippingFee({
-  fromDistrictId,
-  toDistrictId,
-  toWardCode,
-  weight,
-  length,
-  width,
-  height,
-  insuranceValue = 0,
-  coupon = null,
-}) {
-  const [shippingFee, setShippingFee] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+export default function useShippingFee() {
+  const [fee, setFee] = useState(0);
+  const cacheRef = useRef({});
 
-  useEffect(() => {
-    if (!toDistrictId || !toWardCode) return;
-
-    async function fetchFee() {
-      setLoading(true);
-      setError("");
-      try {
-        const data = await getShippingFee({
-          fromDistrictId,
-          toDistrictId,
-          toWardCode,
-          weight,
-          length,
-          width,
-          height,
-          insuranceValue,
-          coupon,
-        });
-        setShippingFee(data.data.total);
-      } catch (err) {
-        setError(err.message || "Không tính được phí vận chuyển");
-      } finally {
-        setLoading(false);
-      }
+  const fetchShippingFee = async (params) => {
+    const cacheKey = JSON.stringify(params);
+    if (cacheRef.current[cacheKey]) {
+      console.log("💾 Lấy phí ship từ cache");
+      setFee(cacheRef.current[cacheKey]);
+      return;
     }
 
-    fetchFee();
-  }, [
-    fromDistrictId,
-    toDistrictId,
-    toWardCode,
-    weight,
-    length,
-    width,
-    height,
-    insuranceValue,
-    coupon,
-  ]);
+    try {
+      const res = await axios.post("/api/shipping", params);
+      const total = res.data?.fee ?? 0;
+      cacheRef.current[cacheKey] = total;
+      setFee(total);
+      console.log("🚚 GHN fee:", total);
+    } catch (error) {
+      console.error("Shipping fee error:", error);
+      setFee(0);
+    }
+  };
 
-  return { shippingFee, loading, error };
+  const debouncedFetch = useRef(debounce(fetchShippingFee, 500)).current;
+
+  return { fee, fetchShippingFee: debouncedFetch };
 }

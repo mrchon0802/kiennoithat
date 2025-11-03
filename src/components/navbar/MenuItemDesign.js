@@ -7,7 +7,7 @@ function MenuItemDesign({ item }) {
   return (
     <div className={styles.menuItem}>
       <div className={styles.itemImage}>
-        <Image src={item.src} alt="menu-nav-design" width={170} height={70} />
+        <Image src={item.image} alt="menu-nav-design" width={170} height={70} />
       </div>
       <div className={styles.itemTitleDesign}>
         <h4>

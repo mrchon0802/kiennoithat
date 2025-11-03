@@ -5,32 +5,38 @@ import styles from "./styles/Action.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { Button, Box } from "@mui/material";
-import {
-  addOrder,
-  updateSelectingOrder,
-  clearSelectingOrder,
-} from "@/store/orderSlice";
-
-function Action({ finalPrice }) {
+import { addToCart } from "@/store/cartSlice";
+function Action({ finalPrice, selectingOrder }) {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const users = useSelector((state) => state.users.users);
-  const currentLogin = useSelector((state) => state.login.currentId);
-  const currentUser = users?.find((u) => u.id === currentLogin);
+  const currentUser = useSelector((state) => state.login.user);
+  const fullAddress = currentUser?.fullAddress || "";
 
-  const selectingOrder = useSelector((state) => state.orders.selectingOrder);
-
-  const handleSubmit = () => {
+  console.log("selectingOrder", selectingOrder);
+  const handleSubmit = async () => {
     if (!currentUser) {
       router.push("/auth");
-    } else {
-      dispatch(addOrder(selectingOrder));
-
-      //xoa du lieu selectingOrder
-      dispatch(clearSelectingOrder());
-      router.push("/shopping-cart");
+      return;
     }
+
+    if (!fullAddress) {
+      router.push("/account-settings/personal-infomation");
+      return;
+    }
+
+    try {
+      await dispatch(
+        addToCart({
+          userId: currentUser._id,
+          items: [selectingOrder],
+        })
+      ).unwrap();
+    } catch (err) {
+      console.error("Error when adding to cart", err);
+    }
+
+    router.push("/cart");
   };
   if (finalPrice == null) return null;
   return (

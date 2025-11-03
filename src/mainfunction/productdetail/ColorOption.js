@@ -1,18 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, ButtonBase, Typography } from "@mui/material";
 import { addOrder } from "@/store/orderSlice";
 import { useDispatch } from "react-redux";
 
-function ColorOption({
+export default function ColorOption({
   activeSelectedColor,
   productOption,
   handleColorOptionClick,
 }) {
-  if (!productOption || !productOption?.color) return null;
-  const selectionColor = productOption.color?.find(
-    (option) => activeSelectedColor === option.id
+  if (!productOption || !productOption?.colors) return null;
+
+  const selectionColor = productOption?.colors?.find(
+    (option) => option._id === activeSelectedColor
   );
 
   return (
@@ -23,7 +24,7 @@ function ColorOption({
           Màu gỗ:{" "}
           {selectionColor && (
             <Typography component="span" sx={{ ml: 0.5 }}>
-              {selectionColor.colorName}
+              {selectionColor.name}
             </Typography>
           )}
         </Typography>
@@ -31,26 +32,28 @@ function ColorOption({
 
       {/* Danh sách màu */}
       <Box display="flex" gap={2} mt={1} flexWrap="wrap">
-        {productOption.color.map((color) => (
+        {productOption.colors.map((color) => (
           <ButtonBase
-            key={color.id}
-            onClick={() => handleColorOptionClick(color.id)}
+            key={color.name}
+            onClick={() => handleColorOptionClick(color._id)}
             sx={{
               borderRadius: 1,
               border:
-                activeSelectedColor === color.id ? "3px solid" : "1px solid",
+                activeSelectedColor === color._id ? "3px solid" : "1px solid",
               borderColor:
-                activeSelectedColor === color.id ? "primary.main" : "grey.400",
+                activeSelectedColor === color._id
+                  ? "--kds-color--color-active"
+                  : "grey.400",
               p: 0.5,
-              width: 125,
-              height: 125,
+              width: 100,
+              height: 100,
               overflow: "hidden",
             }}
           >
             <Box
               component="img"
-              src={color.src}
-              alt={color.colorName}
+              src={color.image}
+              alt={color.name}
               sx={{
                 width: "100%",
                 height: "100%",
@@ -70,4 +73,3 @@ function ColorOption({
     </Box>
   );
 }
-export default ColorOption;

@@ -1,6 +1,23 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { v4 as uuidv4 } from "uuid";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { userApi } from "@/api/userApi";
 
+//async thunks
+export const fetchUsers = createAsyncThunk("user/fetchhAll", async () => {
+  const res = await userApi.getAll();
+  return res.data;
+});
+
+export const createUser = createAsyncThunk("user/create", async (userData) => {
+  const res = await userApi.create(userData);
+  return res.data;
+});
+
+export const deleteUser = createAsyncThunk("user/delete", async (id) => {
+  await userApi.remove(id);
+  return id;
+});
+
+//Initial State
 const initialState = {
   users: [],
   registerForm: {
@@ -16,6 +33,7 @@ const initialState = {
   emailLogin: "",
 };
 
+//slice
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -25,37 +43,32 @@ const userSlice = createSlice({
       state.registerForm = { ...state.registerForm, ...action.payload };
     },
     clearRegisterForm: (state) => {
-      state.registerForm = initialState.registerForm;
-    },
-
-    //quan li user
-    addUser: (state, action) => {
-      const newUser = { id: uuidv4(), ...action.payload };
-      state.users.push(newUser);
-    },
-    updateUser: (state, action) => {
-      const { id, ...change } = action.payload;
-      const index = state.users.findIndex((u) => u.id === id);
-      if (index !== -1) {
-        state.users[index] = { ...state.users[index], ...change };
-      }
-    },
-    removeUser: (state, action) => {
-      state.users = state.users.filter((u) => u.id !== action.payload);
-    },
-    clearUser: (state) => {
-      state.users = [];
+      state.registerForm = { ...initialState.registerForm };
     },
     setEmailLogin: (state, action) => {
       state.emailLogin = action.payload;
     },
+    //clear user
+    clearUser: (state) => {
+      state.users = [];
+    },
+    //xu li API tu backend
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.users = action.payload;
+      })
+      .addCase(createUser.fulfilled, (state, action) => {
+        state.users.push(action.payload);
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.users = state.users.filter((u) => u._id !== action.payload);
+      });
   },
 });
 
 export const {
-  addUser,
-  updateUser,
-  removeUser,
   clearUser,
   updateRegisterForm,
   clearRegisterForm,

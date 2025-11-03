@@ -63,7 +63,26 @@ body::-webkit-scrollbar {
   opacity: 1;
   border-radius: 5px;
 }
-.image-wrapper img.fade-out {
+/* .image-wrapper img.fade-out {
+  opacity: 0;
+}
+.image-wrapper img.fade-in {
+  opacity: 1;
+}
+.image-wrapper img {
+  opacity: 0; mặc định ẩn 
+  transition: opacity 0.5s ease-in-out;
+} */
+.fade-img {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.fade-img.show {
+  opacity: 1;
+}
+
+.fade-img.fade-out {
   opacity: 0;
 }
 .product-image::-webkit-scrollbar {

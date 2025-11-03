@@ -1,23 +1,48 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import clsx from "clsx";
 import Link from "next/link";
 import styles from "./NavBar.module.css";
-import MenuItemProduct from "./MenuItemProduct";
-import MenuItemDesign from "./MenuItemDesign";
 import { Phone, User, Globe, ShoppingCart, Search } from "lucide-react";
-import clsx from "clsx";
 import Image from "next/image";
-import { v4 as uuidv4 } from "uuid";
+import MenuItemDesign from "./MenuItemDesign";
+import MenuItemProduct from "./MenuItemProduct";
+import { userApi } from "@/api/userApi";
+import { logout } from "@/store/loginSlice";
+import { useSelector, useDispatch } from "react-redux";
 
-function NavBar({ productOption }) {
+export default function NavBar() {
+  const logo = "/logo/logo1.png";
+
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.login.user);
+
   const [openMenu, setOpenMenu] = useState(null);
 
-  const logo = productOption?.logo;
-  const menuItems = productOption?.navItemGroup?.productNavItem || [];
-  const menuItemDesign = productOption?.navItemGroup?.designNavItem || [];
+  const [productItems, setProductItems] = useState([]);
+  const [designItems, setDesignItems] = useState([]);
+
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [productRes, designRes] = await Promise.all([
+          fetch(`${baseUrl}/product-nav-items`).then((r) => r.json()),
+          fetch(`${baseUrl}/design-nav-items`).then((r) => r.json()),
+        ]);
+        setProductItems(productRes);
+        setDesignItems(designRes);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    fetchData();
+  }, [baseUrl]);
+
   return (
-    <nav className={styles.navbar}>
+    <div className={styles.navbar}>
       <Link href="/" className={styles.webName}>
         <div className={styles.webNameLogo}>
           {logo && <Image src={logo} alt="logo" width={200} height={60} />}
@@ -39,8 +64,8 @@ function NavBar({ productOption }) {
             onMouseLeave={() => setOpenMenu(null)}
           >
             <div className={styles.menuGrid}>
-              {menuItems.map((item, index) => (
-                <MenuItemProduct key={uuidv4()} item={item} />
+              {(productItems || []).map((item, index) => (
+                <MenuItemProduct key={item._id} item={item} />
               ))}
             </div>
           </div>
@@ -60,8 +85,8 @@ function NavBar({ productOption }) {
             onMouseLeave={() => setOpenMenu(null)}
           >
             <div className={styles.menuGrid}>
-              {menuItemDesign.map((item, index) => (
-                <MenuItemDesign key={uuidv4()} item={item} />
+              {(designItems || []).map((item, index) => (
+                <MenuItemDesign key={item._id} item={item} />
               ))}
             </div>
           </div>
@@ -72,7 +97,7 @@ function NavBar({ productOption }) {
         <Link href="/">
           <Search size={20} />
         </Link>
-        <Link href="/shopping-cart">
+        <Link href="/cart">
           <ShoppingCart size={20} />
         </Link>
         <Link href="/">
@@ -81,11 +106,19 @@ function NavBar({ productOption }) {
         <Link href="/" className={styles.navLang}>
           <Globe size={20} />
         </Link>
-        <Link href="/auth" className={styles.navLogin}>
-          <User size={20} />
-        </Link>
+        {currentUser ? (
+          <Link href="/my-account" className={styles.navUser}>
+            <User size={20} />
+            <span className={styles.username}>
+              {`${currentUser.firstName} ${currentUser.lastName}`}
+            </span>
+          </Link>
+        ) : (
+          <Link href="/auth" className={styles.navLogin}>
+            <User size={20} />
+          </Link>
+        )}
       </div>
-    </nav>
+    </div>
   );
 }
-export default NavBar;

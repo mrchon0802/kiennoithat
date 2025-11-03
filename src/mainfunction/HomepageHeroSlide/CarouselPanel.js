@@ -6,7 +6,7 @@ import Image from "next/image";
 
 function CarouselPanel({ isActive, item, heroProduct }) {
   if (!item) return null;
-  const { src, title, buttons, description = [] } = item;
+  const { image, title, buttons, description = [] } = item;
   return (
     <div
       className={clsx(
@@ -15,7 +15,7 @@ function CarouselPanel({ isActive, item, heroProduct }) {
       )}
     >
       <div className={styles.reactImage}>
-        <Image src={src} alt="" fill />
+        <Image src={image} alt={title || ""} height={675} width={1920} />
       </div>
       <div className={styles.moduleContent}>
         <div className={styles.slideTitle}>

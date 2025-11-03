@@ -13,7 +13,7 @@ function MenuItemProduct({ item }) {
       <div className={styles.itemImage}>
         <Link href={item.link}>
           <Image
-            src={item.src}
+            src={item.image}
             alt="menu-nav-product"
             width={170}
             height={70}
@@ -26,7 +26,7 @@ function MenuItemProduct({ item }) {
       <div className={styles.itemLink}>
         {button.map((btn, index) => (
           <Link
-            key={btn.id}
+            key={index}
             href={btn.link}
             className={clsx(styles.productItemBtn, styles[`btn${btn.id}`])}
           >

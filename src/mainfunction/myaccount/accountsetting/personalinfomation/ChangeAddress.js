@@ -2,23 +2,25 @@
 
 import styles from "./ChangeAddress.module.css";
 import clsx from "clsx";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { ChevronDown } from "lucide-react";
-import { updateUser } from "../../../../store/userSlice";
-import { login } from "../../../../store/loginSlice";
+import { loginSuccess } from "../../../../store/loginSlice";
 import { getProvince, getDistrict, getWard } from "../../../../../utils/ghnApi";
+import { userApi } from "@/api/userApi";
 
 export default function ChangeAddress() {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const users = useSelector((state) => state.users.users);
-  const currentId = useSelector((state) => state.login.currentId);
-  const currentUser = users?.find((u) => u.id === currentId);
-  const address = currentUser?.address || "";
+  const currentUser = useSelector((state) => state.login.user);
+
+  useEffect(() => {
+    if (!currentUser) {
+      router.push("/auth");
+    }
+  }, [currentUser, router]);
 
   const [addressDetail, setAddressDetail] = useState("");
   const [provinceInput, setProvinceInput] = useState("");
@@ -95,15 +97,25 @@ export default function ChangeAddress() {
   const wardFilter = wardList.filter((item) =>
     item.WardName.toLowerCase().includes(wardInput.toLowerCase())
   );
-  const handleSubmit = () => {
-    if (!currentUser) {
-      console.error("Không tìm thấy user hiện tại");
-      return;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const fullAddress = `${addressDetail}, ${wardInput}, ${districtInput}, ${provinceInput}`;
+    try {
+      const res = await userApi.update(currentUser._id, {
+        address: addressDetail,
+        fullAddress: fullAddress,
+        toDistrictId: selectedDistrict?.DistrictID,
+        toWardCode: selectedWard?.WardCode,
+      });
+      const token =
+        JSON.parse(localStorage.getItem("auth") || "{}").token || null;
+
+      dispatch(loginSuccess({ user: res.data, token }));
+      router.push("/account-settings/personal-infomation");
+    } catch (err) {
+      console.error("Error when updating adress", err);
     }
-    const fullAddress = `${addressDetail} ${wardInput} ${districtInput} ${provinceInput}`;
-    dispatch(updateUser({ id: currentUser?.id, address: fullAddress }));
-    dispatch(login(currentUser.id));
-    router.push("/account-settings/personal-infomation");
   };
   const isActive =
     addressDetail !== "" &&
@@ -111,7 +123,7 @@ export default function ChangeAddress() {
     districtInput !== "" &&
     provinceInput !== "";
   return (
-    <div className={styles.formContainer}>
+    <form className={styles.formContainer} onSubmit={handleSubmit}>
       <div className={styles.formTitle}>
         <h2>Thay đổi địa chỉ</h2>
       </div>
@@ -129,6 +141,7 @@ export default function ChangeAddress() {
               placeholder="Nhập tỉnh, thành phố"
             />
             <button
+              type="button"
               onClick={() => {
                 handleToggle("province");
               }}
@@ -139,7 +152,7 @@ export default function ChangeAddress() {
 
           {isProvinceOpen && (
             <ul>
-              {provinceFilter.map((item) => (
+              {provinceFilter.slice(0, 5).map((item) => (
                 <li
                   key={item.ProvinceID}
                   onClick={() => handleSelect("province", item)}
@@ -163,6 +176,7 @@ export default function ChangeAddress() {
               placeholder="Nhập quận, huyện"
             />
             <button
+              type="button"
               onClick={() => {
                 handleToggle("district");
               }}
@@ -196,6 +210,7 @@ export default function ChangeAddress() {
               placeholder="Nhập xã, phường"
             />
             <button
+              type="button"
               onClick={() => {
                 handleToggle("ward");
               }}
@@ -217,11 +232,13 @@ export default function ChangeAddress() {
           )}
         </div>
 
-        <div className={styles.formField}>
+        <div className={styles.addressDetailField}>
           <label>Số nhà, tên đường</label>
           <input
             type="text"
             value={addressDetail}
+            placeholder="Nhập số nhà, tên đường
+"
             onChange={(e) => {
               setAddressDetail(e.target.value);
             }}
@@ -232,7 +249,6 @@ export default function ChangeAddress() {
         <button
           type="submit"
           className={clsx(styles.btnUpdate, isActive && styles.active)}
-          onClick={() => handleSubmit()}
         >
           Cập nhật
         </button>
@@ -244,6 +260,6 @@ export default function ChangeAddress() {
           Hủy
         </button>
       </div>
-    </div>
+    </form>
   );
 }

@@ -65,7 +65,7 @@
   outline: none;
   color: var(--kds-color--color);
 }
-.searchInput i {
+.searchInput button {
   border: none;
   outline: none;
   font-size: 25px;
@@ -129,4 +129,23 @@
   text-decoration: underline;
   font-weight: bold;
   color: var(--kds-color--color);
+}
+.addressDetailField {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  color: var(--kds-color--color);
+  font-size: 15px;
+}
+
+.addressDetailField input {
+  background: var(--kds-color--bg-active);
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  font-size: 15px;
+  padding: 12px;
+}
+.addressDetailField label {
+  margin-bottom: 5px;
 }

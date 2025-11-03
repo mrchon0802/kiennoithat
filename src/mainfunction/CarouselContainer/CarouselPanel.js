@@ -12,6 +12,9 @@ function CarouselPanel({ item, isActive, isPrev, isNext, onPrev, onNext }) {
     if (isPrev) onPrev();
     if (isNext) onNext();
   };
+  const { image, title = [] } = item;
+  console.log("Image source:", image);
+
   return (
     <div
       className={clsx(
@@ -24,11 +27,11 @@ function CarouselPanel({ item, isActive, isPrev, isNext, onPrev, onNext }) {
       style={{ cursor: isActive ? "default" : "pointer" }}
     >
       <div className={styles.reactImage}>
-        <Image src={item.src} alt="" fill />
+        <Image src={image} alt="" width={1024} height={580} />
       </div>
       <div className={styles.moduleContent}>
         <div className={styles.slideTitle}>
-          <h1>{item.title}</h1>
+          <h1>{title}</h1>
         </div>
         <div className={styles.componentHeading}></div>
         <div
@@ -36,7 +39,7 @@ function CarouselPanel({ item, isActive, isPrev, isNext, onPrev, onNext }) {
           onClick={(e) => e.stopPropagation()}
         >
           <button className={styles.orderNowBtn}>
-            <Link href={`/product/${item.productId}`}>Mua ngay</Link>
+            <Link href={`/${item.productId}`}>Mua ngay</Link>
           </button>
 
           <button className={styles.learnMoreBtn}>Learn more</button>

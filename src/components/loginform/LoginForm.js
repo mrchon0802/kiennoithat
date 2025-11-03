@@ -11,6 +11,8 @@ import clsx from "clsx";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { userApi } from "@/api/userApi";
+import { loginStart, loginFailure, loginSuccess } from "../../store/loginSlice";
 import {
   Box,
   TextField,
@@ -27,20 +29,15 @@ const schema = yup.object().shape({
   password: yup
     .string()
     .required("Vui lòng nhập mật khẩu")
-    .min(8, "Mật khẩu phải có ít nhất 6 ký tự"),
+    .min(8, "Mật khẩu phải có ít nhất 8 ký tự"),
 });
 export default function LoginForm() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.users.users);
   const emailLogin = useSelector((state) => state.users.emailLogin);
 
-  const [passwordInput, setPasswordInput] = useState("");
-  const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  const signInDate = useSelector((state) => state.login);
 
   const {
     register,
@@ -48,22 +45,24 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onSubmit = (data) => {
-    //tim user có email trung voi email vua nhap
-    const currentUser = user.find(
-      (u) => u.email.toLowerCase() === emailLogin.toLowerCase()
-    );
+  const onSubmit = async (data) => {
+    dispatch(loginStart());
+    try {
+      const res = await userApi.login(emailLogin, data.password);
 
-    //check mat khau vua nhap co trung voi mat khau da luu khong
-    if (currentUser && currentUser.password === passwordInput.trim()) {
-      //neu dang nhap thanh cong thi luu lai id
-      dispatch(login(currentUser.id));
+      dispatch(loginSuccess(res.data));
+
       router.push("/my-account");
-    } else {
-      setError("Email hoặc mật khẩu này không đúng");
+    } catch (err) {
+      console.error("Login error:", err);
+      const msg =
+        err.response?.data?.message || "Email hoặc mật khẩu không đúng";
+      dispatch(loginFailure(msg));
     }
+    //tim user có email trung voi email vua nhap
   };
-  const isActive = passwordInput.trim() !== "";
+
+  const error = useSelector((state) => state.login.error);
   return (
     <Box
       sx={{

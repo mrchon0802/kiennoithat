@@ -5,14 +5,30 @@ import CarouselPanel from "./CarouselPanel";
 import styles from "./carouselContainer.module.css";
 import clsx from "clsx";
 
-function CarouselContainer({ productOption }) {
-  const panels = productOption?.mainImage || [];
-
+function CarouselContainer() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [translateX, setTranslateX] = useState(0);
 
   const translateWidth = 1024 + 20;
   const newTranslateWidth = translateWidth * 0.6;
+
+  const [panels, setPanels] = useState([]);
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/products");
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await res.json();
+        setPanels(data);
+      } catch (err) {
+        console.error("Error fetching product data:", err);
+      }
+    };
+
+    fetchProduct();
+  }, []);
 
   const calculateTranslateX = useCallback(
     (targetIndex) => {
@@ -63,7 +79,6 @@ function CarouselContainer({ productOption }) {
               item={panel}
               currentIndex={currentIndex}
               isActive={index === currentIndex}
-              panels={panels}
               onPrev={handlePrevpanel}
               onNext={handleNextPanel}
               isPrev={index === currentIndex - 1}

@@ -9,9 +9,9 @@ function SizeOption({
   handleWidthOptionClick,
   activeSelectedSize,
 }) {
-  const selectionSize = productOption?.width?.[activeSelectedSize];
-  const length = productOption?.length;
-  const height = productOption?.height;
+  const selectionSize = productOption?.size?.width[activeSelectedSize];
+  const length = productOption?.size?.length;
+  const height = productOption?.size?.height;
   console.log("chieu rong", selectionSize);
   return (
     <Box>
@@ -19,11 +19,6 @@ function SizeOption({
       <Box mt={3}>
         <Typography variant="body1" fontWeight="bold">
           Kích thước:{" "}
-          {selectionSize && (
-            <Typography component="span" sx={{ ml: 0.5 }}>
-              {selectionSize}
-            </Typography>
-          )}
         </Typography>
       </Box>
 
@@ -38,7 +33,7 @@ function SizeOption({
             width: "100%",
           }}
         >
-          {productOption?.width?.map((option, index) => (
+          {productOption?.size?.width.map((option, index) => (
             <Button
               key={index}
               onClick={() => handleWidthOptionClick(index)}
@@ -60,7 +55,7 @@ function SizeOption({
                 },
               }}
             >
-              {option}
+              {option} m
             </Button>
           ))}
         </ButtonGroup>
@@ -68,12 +63,12 @@ function SizeOption({
 
       {/* Thông tin tổng kích thước */}
       <Box mt={2}>
-        <Typography variant="body1" fontWeight="bold">
+        {/* <Typography variant="body1" fontWeight="bold">
           Kích thước:
-        </Typography>
+        </Typography> */}
         {selectionSize && (
           <Typography variant="body2" sx={{ color: "text.primary", mt: 0.5 }}>
-            Dài {length} x Rộng {selectionSize} x Cao {height}
+            Dài {length} m x Rộng {selectionSize} m x Cao {height} m
           </Typography>
         )}
       </Box>

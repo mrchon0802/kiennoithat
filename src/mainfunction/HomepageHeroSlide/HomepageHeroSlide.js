@@ -6,11 +6,24 @@ import styles from "./homepageHeroSlide.module.css";
 import clsx from "clsx";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 
-function HomepageHeroSlide({ productOption }) {
-  const panels = productOption.hero || [];
+function HomepageHeroSlide() {
+  const [panels, setPanels] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [resetTimer, setResetTimer] = useState(0);
 
+  //fetch du lieu tu api
+  useEffect(() => {
+    const fetchPanels = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/banners");
+        const data = await res.json();
+        setPanels(data);
+      } catch (err) {
+        console.error("Failed to fetch panels:", err);
+      }
+    };
+    fetchPanels();
+  }, []);
   const handlePrevBtn = () => {
     setCurrentIndex((prevIndex) => {
       const newIndex = prevIndex === 0 ? panels.length - 1 : prevIndex - 1;

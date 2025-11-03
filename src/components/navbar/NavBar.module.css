@@ -11,6 +11,7 @@
   padding: 0 50px;
   flex: 0 0 auto;
   min-height: 60px;
+  font-family: sans-serif;
 }
 .webName {
   font-size: 1.5em;
@@ -103,4 +104,16 @@
   justify-content: center;
   align-items: center;
   gap: 70px;
+}
+.navUser {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.username {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--kds-color--color);
 }

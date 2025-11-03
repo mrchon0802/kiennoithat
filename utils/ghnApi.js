@@ -1,6 +1,7 @@
 const BASE_URL = "https://online-gateway.ghn.vn/shiip/public-api";
 const TOKEN = process.env.NEXT_PUBLIC_GHN_TOKEN;
 const SHOP_ID = process.env.NEXT_PUBLIC_GHN_SHOP_ID;
+const FROM_DISTRICT_ID = 725;
 
 async function ghnFetch(endpoint, option = {}) {
   const res = await fetch(`${BASE_URL}${endpoint}`, {
@@ -43,7 +44,7 @@ export async function getAvailableServices({ fromDistrictId, toDistrictId }) {
     method: "POST",
     body: JSON.stringify({
       shop_id: Number(SHOP_ID),
-      from_district: Number(fromDistrictId),
+      from_district: Number(FROM_DISTRICT_ID),
       to_district: Number(toDistrictId),
     }),
   });

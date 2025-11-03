@@ -1,8 +1,8 @@
-.color-option {
+.colorOption {
   display: flex;
   gap: 10px;
 }
-.color-option button {
+.colorOption button {
   margin-top: 10px;
   border: 1px solid var(--kds-color--grey45);
   padding: 5px;
@@ -11,16 +11,16 @@
   cursor: pointer;
   border-radius: 4px;
 }
-.color-option img {
+.colorOption img {
   width: 75px;
   height: 75px;
   object-fit: cover;
   object-position: center;
 }
-.color-option button.active {
+.colorOption button.active {
   border: 3px solid var(--kds-color--color-active);
 }
-.color-notice {
+.colorNotice {
   color: var(--kds-color--color);
   font-size: 15px;
   margin-top: 20px;

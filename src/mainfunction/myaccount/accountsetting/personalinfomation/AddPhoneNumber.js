@@ -4,58 +4,56 @@ import { useEffect, useState } from "react";
 import styles from "./AddPhoneNumber.module.css";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser } from "../../../../store/userSlice";
 import clsx from "clsx";
+import { userApi } from "@/api/userApi";
+import { loginSuccess } from "@/store/loginSlice";
 
 export default function AddPhoneNumber() {
   const router = useRouter();
-
   const dispatch = useDispatch();
 
-  const users = useSelector((state) => state.users.users);
-  const currentId = useSelector((state) => state.login.currentId);
-  const currentUser = users?.find((u) => u.id === currentId);
-  const phoneNumber = currentUser?.phoneNumber || "";
-  const backupPhoneNumber = currentUser?.backupPhoneNumber || "";
+  const currentUser = useSelector((state) => state.login.user);
 
-  const [primaryPhone, setPrimaryPhone] = useState("");
-  const [backupPhone, setBackupPhone] = useState("");
   const [countryCode] = useState("+84");
 
   useEffect(() => {
-    if (phoneNumber.startsWith(countryCode)) {
-      setPrimaryPhone(phoneNumber.replace(countryCode, ""));
+    if (!currentUser) {
+      router.push("/auth");
     }
-    if (backupPhoneNumber.startsWith(countryCode)) {
-      setBackupPhone(backupPhoneNumber.replace(countryCode, ""));
-    }
-  }, [phoneNumber, backupPhoneNumber, countryCode]);
+  }, [currentUser, router]);
 
-  const handleSubmit = (e) => {
+  const [primaryPhone, setPrimaryPhone] = useState("");
+  const [backupPhone, setBackupPhone] = useState("");
+
+  useEffect(() => {
+    if (currentUser?.phoneNumber?.startsWith(countryCode)) {
+      setPrimaryPhone(currentUser.phoneNumber.replace(countryCode, ""));
+    }
+    if (currentUser?.backupPhoneNumber?.startsWith(countryCode)) {
+      setBackupPhone(currentUser.backupPhoneNumber.replace(countryCode, ""));
+    }
+  }, [currentUser, countryCode]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Phone Number:", countryCode, primaryPhone);
 
-    const formatPrimaryPhone = `${countryCode}${primaryPhone}`;
+    try {
+      const updateData = {
+        phoneNumber: primaryPhone ? `${countryCode}${primaryPhone}` : "",
+        backupPhoneNumber: backupPhone ? `${countryCode}${backupPhone}` : "",
+      };
 
-    if (currentUser) {
-      dispatch(
-        updateUser({ id: currentUser.id, phoneNumber: formatPrimaryPhone })
-      );
+      const res = await userApi.update(currentUser._id, updateData);
+
+      const token =
+        JSON.parse(localStorage.getItem("auth") || "{}").token || null;
+
+      dispatch(loginSuccess({ user: res.data, token }));
+
+      router.back();
+    } catch (err) {
+      console.error("Error when updating phone number", err);
     }
-
-    console.log("Phone Number:", countryCode, backupPhone);
-
-    const formatBackupPhone = `${countryCode}${backupPhone}`;
-
-    if (currentUser) {
-      dispatch(
-        updateUser({
-          id: currentUser.id,
-          backupPhoneNumber: formatBackupPhone,
-        })
-      );
-    }
-    router.back();
   };
   const isActive = primaryPhone.trim() !== "" && backupPhone.trim() !== "";
   return (

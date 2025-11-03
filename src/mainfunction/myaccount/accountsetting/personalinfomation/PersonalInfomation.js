@@ -9,9 +9,7 @@ export default function PersonalInfomation({ children }) {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const currentId = useSelector((state) => state.login.currentId);
-  const user = useSelector((state) => state.users.users);
-  const currentUser = user.find((u) => u.id === currentId) || {};
+  const currentUser = useSelector((state) => state.login.user);
 
   const {
     firstName = "",
@@ -19,8 +17,8 @@ export default function PersonalInfomation({ children }) {
     email = "",
     phoneNumber = "",
     backupPhoneNumber = "",
-    address = "",
-  } = currentUser;
+    fullAddress = "",
+  } = currentUser || {};
   return (
     <div className={styles.personalInfomation}>
       <h1>Thông Tin Cá Nhân</h1>
@@ -105,7 +103,7 @@ export default function PersonalInfomation({ children }) {
                 {backupPhoneNumber || "Chưa có thông tin"}
               </span>
             </div>
-            <button
+            {/* <button
               className={clsx(styles.btn, styles.primaryPhoneNumberAddBtn)}
               onClick={() =>
                 router.push(
@@ -114,7 +112,7 @@ export default function PersonalInfomation({ children }) {
               }
             >
               Thay đổi
-            </button>
+            </button> */}
           </div>
         </section>
 
@@ -124,7 +122,7 @@ export default function PersonalInfomation({ children }) {
             <div className={styles.infoRow}>
               <span className={styles.label}>Địa chỉ nhận hàng</span>
               <span className={clsx(styles.value)}>
-                {address || "Chưa có thông tin"}
+                {fullAddress || "Chưa có thông tin"}
               </span>
             </div>
             <button

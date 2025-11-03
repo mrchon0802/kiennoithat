@@ -7,6 +7,7 @@ import { useState } from "react";
 import clsx from "clsx";
 import { Eye, EyeOff } from "lucide-react";
 import styles from "./RegisterStepTwo.module.css";
+import { userApi } from "@/api/userApi";
 import {
   Box,
   TextField,
@@ -44,7 +45,7 @@ function RegisterStepTwo() {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const users = useSelector((state) => state.users.users);
+  const registerForm = useSelector((state) => state.users.registerForm);
 
   const [show, setShow] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -57,21 +58,38 @@ function RegisterStepTwo() {
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: { email: "", password: "", confirmPassword: "" },
+    defaultValues: {
+      email: registerForm.email,
+      password: registerForm.password,
+      confirmPassword: registerForm.confirmPassword,
+    },
   });
   //valiedate email
+  const onSubmit = async (data) => {
+    console.log("Step 2 submit data:", data);
+    try {
+      const user = await userApi.getByEmail(data.email);
 
-  const onSubmit = (data) => {
-    const existEmail = users?.find((u) => u.email === form.email);
-    if (existEmail) {
-      setError("email", {
-        type: "manual",
-        message: `Email ${data.email} đã tồn tại`,
-      });
-      return;
+      if (user) {
+        setError("email", {
+          type: "manual",
+          message: `Email ${data.email} đã tồn tại`,
+        });
+        return;
+      }
+    } catch (err) {
+      if (err.response && err.response.status !== 404) {
+        console.error("Lỗi khi kiểm tra email:", err);
+        setError("email", {
+          type: "manual",
+          message: "Không thể kiểm tra email. Vui lòng thử lại sau.",
+        });
+        return;
+      }
     }
 
-    dispatch(updateRegisterForm(data));
+    const { confirmPassword, ...importantData } = data;
+    dispatch(updateRegisterForm(importantData));
     router.push("/auth/register/step-3");
   };
 

@@ -1,34 +1,47 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import PanelItem from "./CarouselPanel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import clsx from "clsx";
 import styles from "./FeatureDetail.module.css";
 import { Button } from "@mui/material";
 
-// Tách panel item ra thành một component con để dễ quản lý
-
-function FeatureDetail({ productOption, onClose }) {
-  const panels = productOption?.featureDetail || [];
+function FeatureDetail({ onClose }) {
+  const [products, setProducts] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [viewPortWidth, setViewPortWidth] = useState(window.innerWidth);
-  const [hoverZone, setHoverZone] = useState(null);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/products");
+        if (!res.ok) {
+          throw new Error("Network was bad");
+        }
+        const data = await res.json();
+        setProducts(data);
+      } catch (err) {
+        console.error("Failed to fetch data", err);
+      }
+    };
+    fetchProduct();
+  }, []);
+
+  const panels = useMemo(() => {
+    return products.flatMap((p) => p.features || []) || [];
+  }, [products]);
 
   const handlePrev = () => {
-    // Giảm index, nhưng không nhỏ hơn 0
     setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
   };
 
   const handleNext = () => {
-    // Tăng index, nhưng không lớn hơn panel cuối cùng
     setCurrentIndex((prevIndex) =>
       prevIndex < panels.length - 1 ? prevIndex + 1 : panels.length - 1
     );
   };
 
-  // Tính toán giá trị transform cho cả dải panel
-  // Chiều rộng mỗi panel (880px) + margin hai bên (30px * 2)
   const panelTotalWidth = 880 + 60;
   useEffect(() => {
     const handleResize = () => {
@@ -48,44 +61,35 @@ function FeatureDetail({ productOption, onClose }) {
     <div
       className={styles.featureDetail}
       onClick={(e) => {
-        if (!e.target.closest(".panel-list")) {
+        if (!e.target.closest(styles.panelList)) {
           onClose?.();
         }
       }}
     >
-      {/* Nút điều khiển được đặt bên ngoài */}
-
-      {/* 1. KHUNG NHÌN: Có kích thước cố định và ẩn phần thừa */}
       <div className={styles.carouselViewport}>
-        {/* 2. THƯỚC PHIM: Chứa tất cả các panel và sẽ được di chuyển */}
-        <Button
-          className={clsx(styles.control, styles.prevBtn)}
-          onClick={(e) => {
-            e.stopPropagation();
-            handlePrev();
-          }}
-        >
-          <ChevronLeft size={30} />
-        </Button>
-        <Button
-          className={clsx(styles.control, styles.nextBtn)}
-          onClick={(e) => {
-            e.stopPropagation();
-            handleNext();
-          }}
-        >
-          <ChevronRight size={30} />
-        </Button>
         <div className={styles.panelList} style={listStyle}>
           {panels.map((panel, index) => {
+            const getPosition = (index, currentIndex, total) => {
+              const diff = index - currentIndex;
+
+              if (diff === 0) return "center";
+              if (diff === -1) return "left";
+              if (diff === 1) return "right";
+              return "hidden";
+            };
+            const position = getPosition(index, currentIndex);
+
             return (
               <PanelItem
-                key={index}
+                key={panel._id}
                 item={panel}
                 currentIndex={currentIndex}
                 panels={panels}
                 isActive={index === currentIndex}
                 onClose={onClose}
+                position={position}
+                onPrev={handlePrev}
+                onNext={handleNext}
               />
             );
           })}
