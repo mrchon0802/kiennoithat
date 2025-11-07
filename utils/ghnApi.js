@@ -1,7 +1,7 @@
 const BASE_URL = "https://online-gateway.ghn.vn/shiip/public-api";
-const TOKEN = process.env.NEXT_PUBLIC_GHN_TOKEN;
-const SHOP_ID = process.env.NEXT_PUBLIC_GHN_SHOP_ID;
-const FROM_DISTRICT_ID = 725;
+const TOKEN = process.env.GHN_TOKEN;
+const SHOP_ID = process.env.GHN_SHOP_ID;
+const FROM_DISTRICT_ID = process.env.GHN_SHOP_DISTRICT_ID;
 
 async function ghnFetch(endpoint, option = {}) {
   const res = await fetch(`${BASE_URL}${endpoint}`, {
@@ -21,22 +21,26 @@ async function ghnFetch(endpoint, option = {}) {
   return res.json();
 }
 
-export function getProvince() {
-  return ghnFetch("/master-data/province");
+export async function getProvince() {
+  const res = await fetch("/api/ghn/province", { cache: "no-store" });
+  if (!res.ok) throw new Error(`Province fetch failed: ${res.status}`);
+  return res.json();
 }
 
-export function getDistrict(provinceId) {
-  return ghnFetch("/master-data/district", {
-    method: "POST",
-    body: JSON.stringify({ province_id: provinceId }),
+export async function getDistrict(provinceId) {
+  const res = await fetch(`/api/ghn/district?province_id=${provinceId}`, {
+    cache: "no-store",
   });
+  if (!res.ok) throw new Error(`District fetch failed: ${res.status}`);
+  return res.json();
 }
 
-export function getWard(districtId) {
-  return ghnFetch("/master-data/ward", {
-    method: "POST",
-    body: JSON.stringify({ district_id: districtId }),
+export async function getWard(districtId) {
+  const res = await fetch(`/api/ghn/ward?district_id=${districtId}`, {
+    cache: "no-store",
   });
+  if (!res.ok) throw new Error(`Ward fetch failed: ${res.status}`);
+  return res.json();
 }
 
 export async function getAvailableServices({ fromDistrictId, toDistrictId }) {
