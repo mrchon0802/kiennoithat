@@ -7,10 +7,13 @@ import Image from "next/image";
 
 function HouseDesign() {
   const [items, setItems] = useState([]);
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const res = await fetch("http://localhost:5000/design-carousel");
+        const res = await fetch(`${apiUrl}/design-carousel`);
         const data = await res.json();
         setItems(data);
       } catch (err) {

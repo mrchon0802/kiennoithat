@@ -13,10 +13,13 @@ function CarouselContainer() {
   const newTranslateWidth = translateWidth * 0.6;
 
   const [panels, setPanels] = useState([]);
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch("http://localhost:5000/products");
+        const res = await fetch(`${apiUrl}/products`);
         if (!res.ok) {
           throw new Error("Network response was not ok");
         }

@@ -4,7 +4,8 @@
   height: 260px; /* chiều cao 220px */
   padding: 40px;
   gap: 30px;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .kdsHds {

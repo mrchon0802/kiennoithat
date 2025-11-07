@@ -10,12 +10,12 @@ function HomepageHeroSlide() {
   const [panels, setPanels] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [resetTimer, setResetTimer] = useState(0);
-
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
   //fetch du lieu tu api
   useEffect(() => {
     const fetchPanels = async () => {
       try {
-        const res = await fetch("http://localhost:5000/banners");
+        const res = await fetch(`${apiUrl}/banners`);
         const data = await res.json();
         setPanels(data);
       } catch (err) {

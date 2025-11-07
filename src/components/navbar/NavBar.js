@@ -23,14 +23,14 @@ export default function NavBar() {
   const [productItems, setProductItems] = useState([]);
   const [designItems, setDesignItems] = useState([]);
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
   useEffect(() => {
     async function fetchData() {
       try {
         const [productRes, designRes] = await Promise.all([
-          fetch(`${baseUrl}/product-nav-items`).then((r) => r.json()),
-          fetch(`${baseUrl}/design-nav-items`).then((r) => r.json()),
+          fetch(`${apiUrl}/product-nav-items`).then((r) => r.json()),
+          fetch(`${apiUrl}/design-nav-items`).then((r) => r.json()),
         ]);
         setProductItems(productRes);
         setDesignItems(designRes);
@@ -39,7 +39,7 @@ export default function NavBar() {
       }
     }
     fetchData();
-  }, [baseUrl]);
+  }, [apiUrl]);
 
   return (
     <div className={styles.navbar}>
