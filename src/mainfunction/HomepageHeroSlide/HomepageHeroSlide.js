@@ -23,7 +23,7 @@ function HomepageHeroSlide() {
       }
     };
     fetchPanels();
-  }, []);
+  }, [apiUrl]);
   const handlePrevBtn = () => {
     setCurrentIndex((prevIndex) => {
       const newIndex = prevIndex === 0 ? panels.length - 1 : prevIndex - 1;

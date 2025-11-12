@@ -31,7 +31,7 @@ function CarouselContainer() {
     };
 
     fetchProduct();
-  }, []);
+  }, [apiUrl]);
 
   const calculateTranslateX = useCallback(
     (targetIndex) => {

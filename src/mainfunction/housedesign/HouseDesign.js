@@ -21,7 +21,7 @@ function HouseDesign() {
       }
     };
     fetchItems();
-  }, []);
+  }, [apiUrl]);
   return (
     <div className={styles.kdsHouseDesign}>
       {items.map((item, index) => (
