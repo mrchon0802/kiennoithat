@@ -1,0 +1,50 @@
+.container {
+  position: fixed;
+  background: white;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  overflow: hidden;
+  padding: 50px 0 0 50px;
+  font-weight: 550;
+}
+.sidebarControl {
+  max-width: 400px;
+  padding: 0;
+}
+
+.sidebarControl ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 20px;
+
+  color: var(--kds-color--color);
+  text-decoration: none;
+}
+
+.sidebarItem:hover {
+  color: var(--kds-color--color-active);
+}
+.closeIcon {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  cursor: pointer;
+}
+.sidebarControl button {
+  background: transparent;
+}

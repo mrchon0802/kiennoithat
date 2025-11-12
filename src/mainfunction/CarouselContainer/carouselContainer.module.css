@@ -108,3 +108,9 @@
 .dot.active {
   background-color: #333;
 }
+@media (max-width: 1200px) {
+  .productCardCarouselSlide {
+    width: 606px;
+    height: 520px;
+  }
+}

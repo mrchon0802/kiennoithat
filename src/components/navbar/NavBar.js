@@ -8,12 +8,13 @@ import { Phone, User, Globe, ShoppingCart, Search } from "lucide-react";
 import Image from "next/image";
 import MenuItemDesign from "./MenuItemDesign";
 import MenuItemProduct from "./MenuItemProduct";
-import { userApi } from "@/api/userApi";
-import { logout } from "@/store/loginSlice";
+import { usePathname } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function NavBar() {
   const logo = "/logo/logo1.png";
+
+  const pathname = usePathname();
 
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.login.user);
@@ -41,6 +42,10 @@ export default function NavBar() {
     fetchData();
   }, [apiUrl]);
 
+  const showMainMenus = pathname === "/";
+
+  const hideCart = pathname.startsWith("/auth");
+  const showCart = !hideCart;
   return (
     <div className={styles.navbar}>
       <Link href="/" className={styles.webName}>
@@ -48,64 +53,66 @@ export default function NavBar() {
           {logo && <Image src={logo} alt="logo" width={200} height={60} />}
         </div>
       </Link>
-      <div className={styles.navItemGroup}>
-        <div className={styles.navItemWrapper}>
-          <div
-            className={styles.navItem}
-            onMouseEnter={() => setOpenMenu("noithat")}
-          >
-            <Link href="/">Nội Thất</Link>
+      {showMainMenus && (
+        <div className={styles.navItemGroup}>
+          <div className={styles.navItemWrapper}>
+            <div
+              className={styles.navItem}
+              onMouseEnter={() => setOpenMenu("noithat")}
+            >
+              <Link href="/">Nội Thất</Link>
+            </div>
+            <div
+              className={clsx(
+                styles.megaMenu,
+                openMenu === "noithat" && styles.open
+              )}
+              onMouseLeave={() => setOpenMenu(null)}
+            >
+              <div className={styles.menuGrid}>
+                {(productItems || []).map((item, index) => (
+                  <MenuItemProduct key={item._id} item={item} />
+                ))}
+              </div>
+            </div>
           </div>
           <div
-            className={clsx(
-              styles.megaMenu,
-              openMenu === "noithat" && styles.open
-            )}
-            onMouseLeave={() => setOpenMenu(null)}
+            className={styles.navItemWrapper}
+            onMouseEnter={() => setOpenMenu("thietke")}
           >
-            <div className={styles.menuGrid}>
-              {(productItems || []).map((item, index) => (
-                <MenuItemProduct key={item._id} item={item} />
-              ))}
+            <div className={styles.navItem}>
+              <Link href="/">Thiết Kế</Link>
+            </div>
+            <div
+              className={clsx(
+                styles.megaMenu,
+                openMenu === "thietke" && styles.open
+              )}
+              onMouseLeave={() => setOpenMenu(null)}
+            >
+              <div className={styles.menuGrid}>
+                {(designItems || []).map((item, index) => (
+                  <MenuItemDesign key={item._id} item={item} />
+                ))}
+              </div>
             </div>
           </div>
         </div>
-        <div
-          className={styles.navItemWrapper}
-          onMouseEnter={() => setOpenMenu("thietke")}
-        >
-          <div className={styles.navItem}>
-            <Link href="/">Thiết Kế</Link>
-          </div>
-          <div
-            className={clsx(
-              styles.megaMenu,
-              openMenu === "thietke" && styles.open
-            )}
-            onMouseLeave={() => setOpenMenu(null)}
-          >
-            <div className={styles.menuGrid}>
-              {(designItems || []).map((item, index) => (
-                <MenuItemDesign key={item._id} item={item} />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+      )}
 
       <div className={styles.navItemFunction}>
         <Link href="/">
           <Search size={20} />
         </Link>
-        <Link href="/cart">
-          <ShoppingCart size={20} />
-        </Link>
+        {showCart && (
+          <Link href="/cart">
+            <ShoppingCart size={20} />
+          </Link>
+        )}
         <Link href="/">
           <Phone size={20} />
         </Link>
-        <Link href="/" className={styles.navLang}>
-          <Globe size={20} />
-        </Link>
+
         {currentUser ? (
           <Link href="/my-account" className={styles.navUser}>
             <User size={20} />

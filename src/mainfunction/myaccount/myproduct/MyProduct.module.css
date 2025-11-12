@@ -1,7 +1,7 @@
 /* Main Content */
 .mainContent {
   flex: 1 1 80%;
-  padding: 40px;
+  padding-top: 50px;
 }
 
 .mainContent h2 {
@@ -75,4 +75,10 @@
 .cancelOrder {
   font-size: 13px;
   color: var(--kds-color--color);
+}
+
+@media (max-width: 1200px) {
+  .mainContent {
+    padding-top: 0;
+  }
 }

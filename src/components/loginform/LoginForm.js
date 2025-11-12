@@ -49,6 +49,7 @@ export default function LoginForm() {
     dispatch(loginStart());
     try {
       const res = await userApi.login(emailLogin, data.password);
+      console.log("Login API response:", res);
 
       dispatch(loginSuccess(res.data));
 

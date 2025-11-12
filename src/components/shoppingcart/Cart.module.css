@@ -235,3 +235,8 @@
   font-size: 18px;
   color: #555;
 }
+@media (max-width: 1050px) {
+  .shoppingCart {
+    width: 90%;
+  }
+}

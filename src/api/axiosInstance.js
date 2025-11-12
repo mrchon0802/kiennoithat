@@ -24,11 +24,9 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest); // gọi lại request ban đầu
       } catch (refreshError) {
         console.error("Refresh token thất bại:", refreshError);
-        // Có thể logout ở đây nếu muốn
+        return Promise.reject(refreshError);
       }
     }
-
-    return Promise.reject(refreshError);
   }
 );
 

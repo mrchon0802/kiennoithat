@@ -2,7 +2,7 @@
   display: flex;
   min-height: 100vh;
   font-family: Arial, sans-serif;
-  padding: 0 200px;
+  padding: 0 150px;
   align-items: flex-start;
   gap: 30px;
   overflow-y: hidden;
@@ -10,7 +10,7 @@
 
 /* Sidebar */
 .sidebarControl {
-  flex: 0 0 20%;
+  min-width: 300px;
   padding-top: 100px;
   position: sticky;
   top: 0;
@@ -65,4 +65,47 @@
   padding: 0;
   font: inherit;
   text-align: left;
+}
+
+@media (max-width: 1200px) {
+  .accountContainer {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    padding: 20px 0 0 50px;
+  }
+  .sidebarControl {
+    padding-top: 0;
+  }
+  .mainContent {
+    padding: 0;
+  }
+  .mainContent h2 {
+    display: none;
+  }
+  .mobileHeaderContent {
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .mobileIcon {
+    background: #eee;
+    border-radius: 50%;
+    padding: 5px;
+  }
+  .mobileLabel {
+    font-weight: 550;
+    font-size: 20px;
+  }
+  .mobileArrowDown {
+    font-size: 25px;
+  }
+  .mobileHeader {
+    background: transparent;
+    border: none;
+    outline: none;
+  }
+  .sidebarControl ul {
+    gap: 30px;
+  }
 }
