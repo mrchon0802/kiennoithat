@@ -30,13 +30,13 @@ function ProductDetail() {
 
   const params = useParams();
   const productId = params.productId;
-
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
   //load du lieu tu json
   useEffect(() => {
     if (!productId) return;
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/products/${productId}`);
+        const res = await fetch(`${apiUrl}/products`);
         if (!res.ok) {
           throw new Error("Network response was not ok");
         }

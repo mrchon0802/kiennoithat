@@ -109,7 +109,7 @@ export default function NavBar() {
             <ShoppingCart size={20} />
           </Link>
         )}
-        <Link href="/">
+        <Link href="/contact">
           <Phone size={20} />
         </Link>
 
