@@ -36,7 +36,7 @@ function ProductDetail() {
     if (!productId) return;
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`${apiUrl}/products`);
+        const res = await fetch(`${apiUrl}/products/${productId}`);
         if (!res.ok) {
           throw new Error("Network response was not ok");
         }
