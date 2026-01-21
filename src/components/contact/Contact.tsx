@@ -1,6 +1,8 @@
+"use client";
+
 import React from "react";
 import { Facebook, Youtube, MapPin, Instagram } from "lucide-react";
-import { YouTube } from "@mui/icons-material";
+
 import styles from "./Contact.module.css";
 
 type SocialLink = {
@@ -16,9 +18,14 @@ const socialLinks: SocialLink[] = [
     icon: <Facebook className={styles.icon} />,
   },
   {
-    name: "Youtube",
-    href: "https://youtube.com/kiennoithat",
-    icon: <YouTube className={styles.icon} />,
+    name: "Instagram",
+    href: "https://instagram.com/kiennoithat",
+    icon: <Instagram className={styles.icon} />,
+  },
+  {
+    name: "Tiktok",
+    href: "https://tiktok.com/kiennoithat",
+    icon: <Youtube className={styles.icon} />,
   },
 ];
 
