@@ -68,8 +68,16 @@
   cursor: pointer;
 }
 .orderNowBtn {
+  all: unset;
   background: #3e6ae1;
   color: white;
+  padding: 12px 32px;
+  font-size: 15px;
+  border-radius: 5px;
+  font-weight: 550;
+  border: none;
+  outline: none;
+  cursor: pointer;
 }
 .orderNowBtn:hover {
   background: var(--kds-color--button-bg-active);
