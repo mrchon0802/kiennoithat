@@ -55,7 +55,7 @@ const CarouselPanel: React.FC<CarouselPanelProps> = ({
             buttons.map((btn) => (
               <Link
                 key={btn.label}
-                href={btn.link}
+                href={`/product${btn.link}`}
                 className={clsx(
                   btn.label === "Mua Ngay" && styles.orderNowBtn,
                   btn.label === "View Detail" && styles.viewDetailBtn,

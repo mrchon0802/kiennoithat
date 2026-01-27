@@ -62,7 +62,7 @@ const CarouselPanel: React.FC<CarouselPanelProps> = ({
           className={styles.buttonGroup}
           onClick={(e) => e.stopPropagation()}
         >
-          <Link href={`/${productId}`} className={styles.orderNowBtn}>
+          <Link href={`product/${productId}`} className={styles.orderNowBtn}>
             Mua ngay
           </Link>
 
