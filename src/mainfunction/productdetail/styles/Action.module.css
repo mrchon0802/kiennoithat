@@ -3,7 +3,8 @@
   align-items: center;
   justify-content: space-between;
   border-radius: 15px;
-  box-shadow: -5px 0 8px rgba(161, 161, 161, 0.1),
+  box-shadow:
+    -5px 0 8px rgba(161, 161, 161, 0.1),
     /* bên trái */ 5px 0 8px rgba(161, 161, 161, 0.1),
     /* bên phải */ 0 -5px 8px rgba(161, 161, 161, 0.1);
   padding: 20px;

@@ -1,12 +1,11 @@
 "use client";
 
-import { useDispatch, useSelector } from "react-redux";
-import { updateRegisterForm } from "../../store/userSlice";
+import React from "react";
+import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import styles from "./RegisterStepOne.module.css";
-import clsx from "clsx";
-import { use, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import {
   Box,
   Typography,
@@ -14,10 +13,27 @@ import {
   Button,
   FormHelperText,
 } from "@mui/material";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 
-const schema = yup.object({
+import { updateRegisterForm } from "../../store/userSlice";
+import type { AppDispatch } from "@/store/store";
+
+// --------------------
+// Types
+// --------------------
+interface RegisterStepOneValues {
+  firstName?: string;
+  lastName?: string;
+}
+
+// (nếu sau này dùng multi-step controlled)
+interface RegisterStepOneProps {
+  onNext?: () => void;
+}
+
+// --------------------
+// Validation schema
+// --------------------
+const schema: yup.ObjectSchema<RegisterStepOneValues> = yup.object({
   firstName: yup
     .string()
     .trim()
@@ -29,23 +45,30 @@ const schema = yup.object({
     .required("Vui lòng nhập tên")
     .min(1, "Tên phải có ít nhất 1 kí tự"),
 });
-function RegisterStepOne({ onNext }) {
-  const dispatch = useDispatch();
+
+// --------------------
+// Component
+// --------------------
+const RegisterStepOne: React.FC<RegisterStepOneProps> = ({ onNext }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm({
+  } = useForm<RegisterStepOneValues>({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: { firstName: "", lastName: "" },
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+    },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit: SubmitHandler<RegisterStepOneValues> = (data) => {
     dispatch(updateRegisterForm(data));
-
+    onNext?.();
     router.push("/auth/register/step-2");
   };
 
@@ -70,10 +93,10 @@ function RegisterStepOne({ onNext }) {
           Tạo Tài Khoản
         </Typography>
       </Box>
+
       {/* Họ */}
       <TextField
         label="Họ"
-        variant="outlined"
         fullWidth
         {...register("firstName")}
         error={!!errors.firstName}
@@ -83,7 +106,6 @@ function RegisterStepOne({ onNext }) {
       {/* Tên */}
       <TextField
         label="Tên"
-        variant="outlined"
         fullWidth
         {...register("lastName")}
         error={!!errors.lastName}
@@ -116,11 +138,9 @@ function RegisterStepOne({ onNext }) {
         liên lạc tôi cung cấp.
       </FormHelperText>
 
-      {/* Button */}
       <Button
         type="submit"
         variant="contained"
-        color="primary"
         fullWidth
         disabled={!isValid}
         sx={{ mt: 2 }}
@@ -129,5 +149,6 @@ function RegisterStepOne({ onNext }) {
       </Button>
     </Box>
   );
-}
+};
+
 export default RegisterStepOne;

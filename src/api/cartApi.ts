@@ -1,10 +1,11 @@
 import axiosInstance from "./axiosInstance";
 import type {
-  CartResponse,
   AddToCartPayload,
   UpdateCartPayload,
+  UpdateCartItemPayload,
   RemoveCartItemPayload,
-} from "@/type/Cart";
+} from "@/type/Cart.payload";
+import type { CartResponse } from "@/type/Cart.response";
 
 export const cartApi = {
   /** 🛒 Lấy giỏ hàng */
@@ -20,9 +21,10 @@ export const cartApi = {
   },
 
   /** 🔄 Cập nhật số lượng */
+  /** 🔄 Cập nhật số lượng */
   updateQuantity: async (
     userId: string,
-    payload: UpdateCartPayload,
+    payload: UpdateCartItemPayload,
   ): Promise<CartResponse> => {
     const res = await axiosInstance.patch<CartResponse>(
       `/cart/${userId}`,

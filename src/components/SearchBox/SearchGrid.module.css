@@ -1,0 +1,53 @@
+/* SearchGrid.module.css */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 24px;
+  margin-top: 24px;
+  font-family: sans-serif;
+}
+
+.card {
+  cursor: pointer;
+  background: #f6f6f6;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+}
+
+.imageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  transition: 0.5s;
+}
+.card:hover .image {
+  transform: scale(1.2);
+}
+.image {
+  object-fit: cover;
+  transition: 0.5s;
+}
+.info {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 20px;
+  text-decoration: none;
+}
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.price {
+  font-size: 14px;
+  font-weight: 600;
+}

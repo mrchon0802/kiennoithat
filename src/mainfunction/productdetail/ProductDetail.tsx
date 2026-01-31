@@ -67,7 +67,7 @@ function ProductDetail({ product }: ProductDetailProps) {
   const fullSize = useMemo(() => {
     const { length, height } = product.size;
     return `Dài ${length} x Rộng ${selectedWidth} x Cao ${height}`;
-  }, [product.size.length, product.size.height, selectedWidth]);
+  }, [product.size, selectedWidth]);
 
   const selectedColor = useMemo(() => {
     if (!product.colors.length) return null;
@@ -82,7 +82,7 @@ function ProductDetail({ product }: ProductDetailProps) {
     const multiplier = WIDTH_PRICE_MULTIPLIER[selectedWidth.toString()] ?? 1;
     return Math.round(product.price * multiplier);
   }, [product.price, selectedWidth]);
-  const { size } = product;
+
   const selectingOrder = useMemo<SelectingOrder | null>(() => {
     if (!selectedColor) return null;
 
@@ -109,7 +109,6 @@ function ProductDetail({ product }: ProductDetailProps) {
     selectedWidth,
     finalPrice,
     fullSize,
-    size,
   ]);
 
   /* ===================== EFFECTS ===================== */

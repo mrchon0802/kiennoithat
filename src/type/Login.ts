@@ -8,6 +8,8 @@ export interface AuthUser {
   phoneNumber?: string;
   backupPhoneNumber?: string;
   password?: string;
+  toDistrictId?: number;
+  toWardCode?: string;
 }
 
 export interface LoginState {

@@ -1,13 +1,11 @@
 "use client";
 
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import { updateRegisterForm } from "../../store/userSlice";
-import { useState } from "react";
-import clsx from "clsx";
-import { Eye, EyeOff } from "lucide-react";
-import styles from "./RegisterStepTwo.module.css";
-import { userApi } from "@/api/userApi";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import {
   Box,
   TextField,
@@ -17,12 +15,25 @@ import {
   InputAdornment,
   Button,
 } from "@mui/material";
+import { Eye, EyeOff } from "lucide-react";
 
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useForm } from "react-hook-form";
+import { userApi } from "@/api/userApi";
+import { updateRegisterForm } from "../../store/userSlice";
+import type { RootState, AppDispatch } from "@/store/store";
 
-const schema = yup.object({
+// --------------------
+// Types
+// --------------------
+interface RegisterStepTwoValues {
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+}
+
+// --------------------
+// Validation schema
+// --------------------
+const schema: yup.ObjectSchema<RegisterStepTwoValues> = yup.object({
   email: yup
     .string()
     .email("Email không hợp lệ")
@@ -41,33 +52,41 @@ const schema = yup.object({
     .oneOf([yup.ref("password")], "Mật khẩu không khớp"),
 });
 
-function RegisterStepTwo() {
-  const dispatch = useDispatch();
+// --------------------
+// Component
+// --------------------
+const RegisterStepTwo: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
-  const registerForm = useSelector((state) => state.users.registerForm);
+  const registerForm = useSelector(
+    (state: RootState) => state.users.registerForm,
+  );
 
-  const [show, setShow] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+  const [show, setShow] = useState<boolean>(false);
+  const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors, isValid },
-  } = useForm({
+  } = useForm<RegisterStepTwoValues>({
     resolver: yupResolver(schema),
     mode: "onChange",
     defaultValues: {
-      email: registerForm.email,
-      password: registerForm.password,
-      confirmPassword: registerForm.confirmPassword,
+      email: registerForm.email || "",
+      password: registerForm.password || "",
+      confirmPassword: registerForm.confirmPassword || "",
     },
   });
-  //valiedate email
-  const onSubmit = async (data) => {
-    console.log("Step 2 submit data:", data);
+
+  // --------------------
+  // Submit
+  // --------------------
+  const onSubmit: SubmitHandler<RegisterStepTwoValues> = async (data) => {
     try {
+      // Check email tồn tại
       const user = await userApi.getByEmail(data.email);
 
       if (user) {
@@ -77,9 +96,14 @@ function RegisterStepTwo() {
         });
         return;
       }
-    } catch (err) {
-      if (err.response && err.response.status !== 404) {
-        console.error("Lỗi khi kiểm tra email:", err);
+    } catch (err: unknown) {
+      if (
+        typeof err === "object" &&
+        err !== null &&
+        "response" in err &&
+        (err as any).response?.status !== 404
+      ) {
+        console.error("❌ Lỗi khi kiểm tra email:", err);
         setError("email", {
           type: "manual",
           message: "Không thể kiểm tra email. Vui lòng thử lại sau.",
@@ -90,6 +114,7 @@ function RegisterStepTwo() {
 
     const { confirmPassword, ...importantData } = data;
     dispatch(updateRegisterForm(importantData));
+
     router.push("/auth/register/step-3");
   };
 
@@ -137,7 +162,7 @@ function RegisterStepTwo() {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton onClick={() => setShow((prev) => !prev)} edge="end">
+              <IconButton onClick={() => setShow((p) => !p)} edge="end">
                 {show ? <EyeOff size={20} /> : <Eye size={20} />}
               </IconButton>
             </InputAdornment>
@@ -156,10 +181,7 @@ function RegisterStepTwo() {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton
-                onClick={() => setShowConfirm((prev) => !prev)}
-                edge="end"
-              >
+              <IconButton onClick={() => setShowConfirm((p) => !p)} edge="end">
                 {showConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
               </IconButton>
             </InputAdornment>
@@ -172,28 +194,12 @@ function RegisterStepTwo() {
         Bằng cách nhấn vào &quot;Tạo Tài Khoản&quot;, tôi cho phép Kiến Nội Thất
         liên hệ với tôi để cung cấp thêm thông tin về các sản phẩm, dịch vụ và
         sự kiện tại khu vực của tôi thông qua thông tin liên hệ mà tôi đã cung
-        cấp. Tôi hiểu rằng các cuộc gọi hoặc tin nhắn có thể sử dụng hệ thống
-        quay số tự động hoặc được hỗ trợ bởi máy tính, hoặc tin nhắn đã được ghi
-        âm sẵn. Cước phí tin nhắn và dữ liệu thông thường vẫn được áp dụng. Tôi
-        có thể từ chối nhận các thông tin này bất cứ lúc nào trong mục cài đặt
-        hoặc bằng cách{" "}
-        <span
-          style={{
-            fontWeight: "bold",
-            textDecoration: "underline",
-            cursor: "pointer",
-          }}
-        >
-          hủy đăng ký
-        </span>
-        .
+        cấp.
       </FormHelperText>
 
-      {/* Next Button */}
       <Button
         type="submit"
         variant="contained"
-        color="primary"
         fullWidth
         disabled={!isValid}
         sx={{ mt: 2 }}
@@ -202,5 +208,6 @@ function RegisterStepTwo() {
       </Button>
     </Box>
   );
-}
+};
+
 export default RegisterStepTwo;

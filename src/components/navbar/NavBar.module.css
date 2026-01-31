@@ -13,6 +13,12 @@
   min-height: 60px;
   font-family: sans-serif;
 }
+.leftGroup {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
 .webName {
   font-size: 1.5em;
   font-weight: bold;
@@ -20,8 +26,8 @@
   text-decoration: none;
 }
 .webNameLogo {
-  width: 200px;
-  height: 90%;
+  width: 60px;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -90,7 +96,9 @@
   /* ẩn mặc định */
   padding: 40px 60px;
   z-index: 999;
-  transition: transform 0.7s ease-in-out, opacity 0.7s ease-in-out;
+  transition:
+    transform 0.7s ease-in-out,
+    opacity 0.7s ease-in-out;
   pointer-events: none;
 }
 .megaMenu.open {

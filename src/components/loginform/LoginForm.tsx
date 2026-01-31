@@ -2,17 +2,12 @@
 
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Link from "next/navigation";
-import { login } from "../../store/loginSlice";
 import { useRouter } from "next/navigation";
-import styles from "./LoginForm.module.css";
-import { CircleAlert, Eye, EyeOff } from "lucide-react";
 import clsx from "clsx";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { userApi } from "@/api/userApi";
-import { loginStart, loginFailure, loginSuccess } from "../../store/loginSlice";
+import { CircleAlert, Eye, EyeOff } from "lucide-react";
 import {
   Box,
   TextField,
@@ -24,52 +19,72 @@ import {
   Button,
 } from "@mui/material";
 
-//schema validate voi yup
-const schema = yup.object().shape({
+import { userApi } from "@/api/userApi";
+import { loginStart, loginFailure, loginSuccess } from "../../store/loginSlice";
+
+import type { RootState, AppDispatch } from "@/store/store";
+
+// --------------------
+// Types
+// --------------------
+interface LoginFormValues {
+  password?: string;
+}
+
+// --------------------
+// Validation schema
+// --------------------
+const schema: yup.ObjectSchema<LoginFormValues> = yup.object({
   password: yup
     .string()
     .required("Vui lòng nhập mật khẩu")
     .min(8, "Mật khẩu phải có ít nhất 8 ký tự"),
 });
-export default function LoginForm() {
+
+// --------------------
+// Component
+// --------------------
+const LoginForm: React.FC = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const emailLogin = useSelector((state) => state.users.emailLogin);
+  const emailLogin = useSelector((state: RootState) => state.users.emailLogin);
+  const error = useSelector((state: RootState) => state.login.error);
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm<LoginFormValues>({
+    resolver: yupResolver(schema),
+  });
 
-  const onSubmit = async (data) => {
+  const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
+    if (!emailLogin) return;
+
     dispatch(loginStart());
     try {
-      const res = await userApi.login(emailLogin, data.password);
-      console.log("Login API response:", res);
-
+      const res = await userApi.login({
+        email: emailLogin,
+        password: data.password,
+      });
       dispatch(loginSuccess(res.data));
-
       router.push("/my-account");
-    } catch (err) {
-      console.error("Login error:", err);
+    } catch (err: any) {
       const msg =
-        err.response?.data?.message || "Email hoặc mật khẩu không đúng";
+        err?.response?.data?.message || "Email hoặc mật khẩu không đúng";
       dispatch(loginFailure(msg));
     }
-    //tim user có email trung voi email vua nhap
   };
 
-  const error = useSelector((state) => state.login.error);
   return (
     <Box
       sx={{
         maxWidth: 400,
         margin: "auto",
-        padding: 3,
+        p: 3,
         borderRadius: 2,
         boxShadow: 3,
         bgcolor: "background.paper",
@@ -78,6 +93,7 @@ export default function LoginForm() {
       <Typography variant="h4" mb={2}>
         Đăng Nhập
       </Typography>
+
       <Box
         display="flex"
         justifyContent="space-between"
@@ -89,11 +105,13 @@ export default function LoginForm() {
           Thay đổi
         </Button>
       </Box>
+
       {error && (
         <Alert severity="error" icon={<CircleAlert size={20} />}>
           {error}
         </Alert>
       )}
+
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <TextField
           fullWidth
@@ -107,7 +125,7 @@ export default function LoginForm() {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() => setShowPassword((prev) => !prev)}
                   edge="end"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -116,20 +134,22 @@ export default function LoginForm() {
             ),
           }}
         />
+
         <Button
           type="submit"
           variant="contained"
-          color="primary"
           fullWidth
           sx={{ mt: 2 }}
+          disabled={!emailLogin}
         >
           Đăng Nhập
         </Button>
       </form>
+
       <Box mt={2} textAlign="center">
         <Button
-          onClick={() => router.push("/auth/login/forgot-password")}
           size="small"
+          onClick={() => router.push("/auth/login/forgot-password")}
         >
           Forgot Password?
         </Button>
@@ -139,13 +159,17 @@ export default function LoginForm() {
 
       <Button
         variant="contained"
-        color="primary"
-        sx={{ color: "var(--kds-color--color)", background: "#eee" }}
         fullWidth
+        sx={{
+          color: "var(--kds-color--color)",
+          background: "#eee",
+        }}
         onClick={() => router.push("/auth")}
       >
         Tạo Tài Khoản
       </Button>
     </Box>
   );
-}
+};
+
+export default LoginForm;

@@ -1,33 +1,43 @@
 "use client";
 
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { setEmailLogin } from "../../store/userSlice";
-import styles from "./AuthPage.module.css";
-import clsx from "clsx";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+
 import {
   Box,
   Typography,
   Button,
   TextField,
-  AddBox,
   Divider,
   Link,
 } from "@mui/material";
-import { Mode } from "@mui/icons-material";
 
-const schema = yup.object().shape({
+// --------------------
+// Types
+// --------------------
+interface LoginFormValues {
+  email?: string;
+}
+
+// --------------------
+// Validation schema
+// --------------------
+const schema: yup.ObjectSchema<LoginFormValues> = yup.object({
   email: yup
     .string()
     .email("Email không hợp lệ")
     .required("Vui lòng nhập email hợp lệ"),
 });
 
-export default function LoginForm() {
+// --------------------
+// Component
+// --------------------
+const LoginForm: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -35,9 +45,12 @@ export default function LoginForm() {
     register,
     handleSubmit,
     formState: { isValid, errors },
-  } = useForm({ resolver: yupResolver(schema), mode: "onChange" });
+  } = useForm<LoginFormValues>({
+    resolver: yupResolver(schema),
+    mode: "onChange",
+  });
 
-  const onSubmit = (data) => {
+  const onSubmit: SubmitHandler<LoginFormValues> = (data) => {
     dispatch(setEmailLogin(data.email));
     router.push("/auth/login");
   };
@@ -57,7 +70,7 @@ export default function LoginForm() {
         Đăng Nhập
       </Typography>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <TextField
           label="Email"
           fullWidth
@@ -71,7 +84,6 @@ export default function LoginForm() {
         <Button
           type="submit"
           variant="contained"
-          color="primary"
           fullWidth
           sx={{ mt: 2 }}
           disabled={!isValid}
@@ -90,13 +102,17 @@ export default function LoginForm() {
 
       <Button
         variant="contained"
-        color="primary"
-        sx={{ color: "var(--kds-color--color)", background: "#eee" }}
         fullWidth
+        sx={{
+          color: "var(--kds-color--color)",
+          background: "#eee",
+        }}
         onClick={() => router.push("/auth/register/step-1")}
       >
         Tạo Tài Khoản
       </Button>
     </Box>
   );
-}
+};
+
+export default LoginForm;

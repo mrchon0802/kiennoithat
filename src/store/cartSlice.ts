@@ -1,45 +1,45 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { cartApi } from "@/api/cartApi";
-import type { CartState, CartResponse, AddToCartPayload } from "@/type/Cart";
+import type {
+  AddToCartPayload,
+  UpdateCartPayload,
+  RemoveCartItemPayload,
+} from "@/type/Cart.payload";
+import type { CartState } from "@/type/Cart.state";
+import type { CartResponse } from "@/type/Cart.response";
 
 /** Fetch */
 export const fetchCart = createAsyncThunk<CartResponse, string>(
   "cart/fetch",
-  async (userId) => {
-    return await cartApi.getByUser(userId);
-  },
+  async (userId) => cartApi.getByUser(userId),
 );
 
 /** Add */
 export const addToCart = createAsyncThunk<CartResponse, AddToCartPayload>(
   "cart/add",
-  async (payload) => {
-    return await cartApi.addToCart(payload);
-  },
+  async (payload) => cartApi.addToCart(payload),
 );
 
-/** Update quantity */
-export const updateCartItem = createAsyncThunk<
-  CartResponse,
-  { userId: string; productId: string; quantity: number }
->("cart/update", async ({ userId, ...payload }) => {
-  return await cartApi.updateQuantity(userId, payload);
-});
+/** Update */
+export const updateCartItem = createAsyncThunk<CartResponse, UpdateCartPayload>(
+  "cart/update",
+  async ({ userId, ...payload }) => {
+    return cartApi.updateQuantity(userId, payload);
+  },
+);
 
 /** Remove */
 export const removeFromCart = createAsyncThunk<
   CartResponse,
-  { userId: string; productId: string; size: string; color: string }
+  RemoveCartItemPayload
 >("cart/remove", async (payload) => {
-  return await cartApi.removeItem(payload);
+  return cartApi.removeItem(payload);
 });
 
 /** Clear */
 export const clearCart = createAsyncThunk<CartResponse, string>(
   "cart/clear",
-  async (userId) => {
-    return await cartApi.clearByUser(userId);
-  },
+  async (userId) => cartApi.clearByUser(userId),
 );
 
 const initialState: CartState = {

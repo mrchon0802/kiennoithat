@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import type { RootState, AppDispatch } from "@/store/store";
 import { fetchOrdersByUser } from "@/store/orderSlice";
-import { ProductCardOrder } from "@/type/product-card";
+import type { ProductCardOrder } from "@/type/product-card";
 
 /* ===================== COMPONENT ===================== */
 
@@ -40,7 +40,7 @@ const OrderHistory: React.FC = () => {
         return {
           _id: order._id,
           name: firstItem?.title ?? "Sản phẩm",
-          productImage: firstItem?.color?.productImage ?? "",
+          productImage: firstItem?.color ?? "",
         };
       });
   }, [orders, currentUser?._id]);

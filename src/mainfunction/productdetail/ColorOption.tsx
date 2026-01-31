@@ -19,7 +19,7 @@ export default function ColorOption({
       {/* Tên màu đang chọn */}
       <Box display="flex" alignItems="center" mt={2}>
         <Typography variant="body1" fontWeight="bold">
-          Màu gỗ:{" "}
+          Màu gỗ:
           {selectionColor && (
             <Typography component="span" sx={{ ml: 0.5 }}>
               {selectionColor.name}

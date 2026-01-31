@@ -13,12 +13,7 @@ export interface OrderItem {
   price: number;
   quantity: number;
   size: string;
-  color: {
-    _id: string;
-    name: string;
-    image: string;
-    productImage: string;
-  };
+  color: string;
 }
 
 export interface Order {
@@ -34,7 +29,8 @@ export interface CreateOrderPayload {
   userId: string;
   items: OrderItem[];
   totalPrice: number;
-  address: string;
+  address?: string;
+  shippingFee: number;
 }
 
 export interface OrderState {
