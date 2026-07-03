@@ -1,54 +1,35 @@
-/* ================= DIMENSION ================= */
-/**
- * Mỗi chiều có thể:
- * - nhiều giá trị
- * - selectable = true nếu user được chọn
- */
-export interface DimensionOption {
-  values: string[]; // ["1.4", "1.6", "1.8"]
-  selectable: boolean; // true = cho phép chọn
-}
+// type/ProductType.ts
 
-/* ================= SIZE ================= */
-export interface ProductSize {
-  width: DimensionOption;
-  length: DimensionOption;
-  height: DimensionOption;
-  depth?: DimensionOption; // dùng cho tủ, kệ
-}
-
-/* ================= COLOR ================= */
+/* ================= RAW PRODUCT (khớp 100% với API/JSON thật) ================= */
 export interface ProductColor {
-  _id: string;
   name: string;
-  image: string; // ảnh màu / vật liệu
-  productImage: string; // ảnh sản phẩm theo màu
-}
-
-/* ================= FEATURE ================= */
-export interface ProductFeature {
   image: string;
-  description: string;
+  productImage: string;
 }
 
-/* ================= PRODUCT ================= */
+export interface RawSize {
+  dimensions: Record<string, number[]>;
+  default: Record<string, number>;
+}
+
 export interface ProductType {
-  _id: string;
   productId: string;
-
+  _id?: string;
   title: string;
-  image: string;
   price: number;
-  weight: string;
-
-  category: "bed" | "table" | "chair" | "cabinet" | "sofa" | "other";
-
-  type: "hero" | "normal";
-
-  size: ProductSize;
+  weight: number;
+  room: string[];
+  category: string;
+  type: string;
+  image: string;
+  size: RawSize;
   colors: ProductColor[];
-  features: ProductFeature[];
+}
 
-  createdAt?: string;
-  updatedAt?: string;
+/* ================= SUMMARY (dùng cho ProductGrid/ProductCard — chỉ cần vài field) ================= */
+export interface ProductSummary {
+  productId: string;
+  image: string;
+  title: string;
+  price: number;
 }

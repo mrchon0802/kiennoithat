@@ -128,7 +128,7 @@ const NavMenuItem: React.FC<NavMenuItemProps> = ({ label, slug, room }) => {
             products.map((p) => (
               <Link
                 key={p.productId}
-                href={`/product/${p.productId}`}
+                href={`/san-pham/${p.productId}`}
                 className={styles.heroCard}
               >
                 <div className={styles.heroImg}>
