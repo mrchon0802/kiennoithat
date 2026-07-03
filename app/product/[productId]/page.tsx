@@ -1,5 +1,5 @@
 // app/product/[productId]/page.tsx
-import ProductDetail from "@/mainfunction/productdetail/ProductDetail";
+import ProductDetail from "@/components/productdetail/ProductDetail";
 import { ProductType } from "@/type/ProductType";
 
 const apiUrl = process.env.SERVER_API_URL ?? "http://localhost:5000";

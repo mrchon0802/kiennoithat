@@ -6,7 +6,7 @@ function Footer() {
   return (
     <div className={styles.footer}>
       <div className={styles.footerLink}>
-        <Link href="/">Kiến nội thất © 2025</Link>
+        <Link href="/">Kiến nội thất © 2026</Link>
         <Link href="/">Privacy and Legal</Link>
         <Link href="/contact">Contact</Link>
         <Link href="/">Location</Link>

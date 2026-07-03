@@ -2,6 +2,7 @@
 
 import ProductCard from "./ProductCard";
 import styles from "./ProductGrid.module.css";
+import Link from "next/link";
 
 interface Product {
   productId: string;
@@ -10,15 +11,33 @@ interface Product {
   price: number;
 }
 
-export default function ProductGrid({ products }: { products: Product[] }) {
+interface ProductGridProps {
+  products: Product[];
+  title?: string;
+}
+
+export default function ProductGrid({
+  products,
+  title = "Các sản phẩm nổi bật",
+}: ProductGridProps) {
   return (
     <div className={styles.container}>
-      <h1>Các sản phẩm nổi bật</h1>
-      <section className={styles.grid}>
-        {products.map((product) => (
-          <ProductCard key={product.productId} product={product} />
-        ))}
-      </section>
+      <h1>{title}</h1>
+      {products.length > 0 ? (
+        <section className={styles.grid}>
+          {products.map((product) => (
+            <Link
+              key={product.productId}
+              href={`/product/${product.productId}`}
+              className={styles.cardLink}
+            >
+              <ProductCard product={product} />
+            </Link>
+          ))}
+        </section>
+      ) : (
+        <p className={styles.emptyNote}>Chưa có sản phẩm nào.</p>
+      )}
     </div>
   );
 }

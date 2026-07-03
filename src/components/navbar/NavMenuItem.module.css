@@ -1,0 +1,278 @@
+/* NavMenuItem.module.css */
+
+/* ── Wrapper ──────────────────────────────────────── */
+.navItem {
+  position: relative;
+}
+
+/* ── Trigger button ───────────────────────────────── */
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 14px;
+  height: 60px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.navLink:hover,
+.active .navLink {
+  color: #111;
+}
+
+.chevron {
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+/* ── Mega menu panel ──────────────────────────────── */
+.megaMenu {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  width: 680px;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.10),
+    0 2px 8px rgba(0, 0, 0, 0.06);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 1000;
+}
+
+.megaMenuOpen {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Header row ───────────────────────────────────── */
+.megaTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.megaTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+}
+
+.megaViewAll {
+  font-size: 12px;
+  color: #888;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.megaViewAll:hover {
+  color: #111;
+}
+
+/* ── Hero grid ────────────────────────────────────── */
+.heroGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+  min-height: 160px; /* prevent layout jump during loading */
+}
+
+.heroCard {
+  border: 1px solid #ececec;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.heroCard:hover {
+  border-color: #bbb;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.09);
+}
+
+.heroImg {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+
+.heroInfo {
+  padding: 8px 10px 10px;
+}
+
+.heroName {
+  font-size: 12px;
+  font-weight: 600;
+  color: #111;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.heroPrice {
+  font-size: 11px;
+  color: #888;
+  margin-top: 3px;
+}
+
+.heroActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 7px;
+}
+
+.btnLearn,
+.btnOrder {
+  font-size: 11px;
+  color: #666;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+
+.btnLearn:hover,
+.btnOrder:hover {
+  color: #111;
+}
+
+.btnOrder {
+  color: #4a7c59;
+  font-weight: 500;
+}
+
+/* ── Empty state ──────────────────────────────────── */
+.emptyNote {
+  grid-column: 1 / -1;
+  font-size: 12px;
+  color: #aaa;
+  text-align: center;
+  padding: 20px 0;
+}
+
+/* ── Divider ──────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background: #ececec;
+  margin-bottom: 14px;
+}
+
+/* ── Category pills ───────────────────────────────── */
+.categoryLabel {
+  font-size: 11px;
+  color: #aaa;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  font-size: 12px;
+  color: #555;
+  padding: 4px 13px;
+  border-radius: 99px;
+  border: 1px solid #ddd;
+  background: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  font-family: inherit;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  white-space: nowrap;
+}
+
+.pill:hover {
+  background: #f0f0f0;
+  color: #111;
+  border-color: #bbb;
+}
+
+.pillActive {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+.pillActive:hover {
+  background: #333;
+  color: #fff;
+  border-color: #333;
+}
+
+.pillLink {
+  color: #4a7c59;
+  border-color: #4a7c59;
+}
+
+.pillLink:hover {
+  background: #f0f5f2;
+  color: #2d5c3a;
+  border-color: #2d5c3a;
+}
+
+/* ── Skeleton shimmer ─────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+.skeletonCard {
+  border: 1px solid #ececec;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.skeletonImg {
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+.skeletonInfo {
+  padding: 8px 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.skeletonLine {
+  height: 10px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite;
+}

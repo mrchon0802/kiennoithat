@@ -1,0 +1,17 @@
+.totalTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--kds-color--color);
+  margin-bottom: 10px;
+}
+.totalMaterial {
+  font-size: 15px;
+}
+.totalMaterial ul {
+  list-style-type: "- ";
+  padding-left: 10px;
+  color: var(--kds-color--color);
+}
+.totalMaterial li {
+  margin-bottom: 5px;
+}

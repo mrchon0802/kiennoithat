@@ -1,7 +1,24 @@
+.colorHeader {
+  display: flex;
+  align-items: center;
+}
+
+.colorTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--kds-color--color);
+}
+
+.colorName {
+  font-weight: 400;
+}
+
 .colorOption {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
+
 .colorOption button {
   margin-top: 10px;
   border: 1px solid var(--kds-color--grey45);
@@ -10,16 +27,21 @@
   align-items: center;
   cursor: pointer;
   border-radius: 4px;
+  background: transparent;
 }
+
 .colorOption img {
   width: 75px;
   height: 75px;
   object-fit: cover;
   object-position: center;
+  border-radius: 2px;
 }
+
 .colorOption button.active {
   border: 3px solid var(--kds-color--color-active);
 }
+
 .colorNotice {
   color: var(--kds-color--color);
   font-size: 15px;

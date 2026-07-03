@@ -1,18 +1,29 @@
-.productInfo h1 {
-  text-align: center;
-  /* margin-top: 60px; */
+.sizeTitle {
+  font-weight: 700;
+  font-size: 15px;
+  margin: 0 0 4px;
+  color: var(--kds-color--color);
 }
-.widthDetail {
-  margin-top: 30px;
+
+.dimensionGroup {
+  margin-top: 16px;
 }
+
+.dimensionLabel {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: var(--kds-color--color);
+}
+
 .widthOption {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
   gap: 5px;
 }
+
 .widthOption button {
   flex: 1;
   padding: 15px 20px;
@@ -22,15 +33,21 @@
   color: var(--kds-color--color);
   cursor: pointer;
   font-size: 15px;
+  transition: 0.2s ease;
 }
+
 .widthOption button.active {
   background: var(--kds-color--bg-active);
   color: var(--kds-color--color-active);
   border: 1px solid var(--kds-color--color-active);
+  font-weight: 600;
 }
+
+.totalDetail {
+  margin-top: 16px;
+  color: var(--kds-color--color);
+}
+
 .totalSize {
   font-size: 15px;
-}
-.totalDetail {
-  color: var(--kds-color--color);
 }

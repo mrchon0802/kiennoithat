@@ -1,117 +1,77 @@
+// components/NavBar/Navbar.tsx
+
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import clsx from "clsx";
-import { Phone, User, ShoppingCart, Search } from "lucide-react";
+import { Phone, User, ShoppingCart, Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useSelector } from "react-redux";
-
 import type { RootState } from "@/store/store";
-import type { NavBarProps } from "@/type/Navbar";
-
 import styles from "./NavBar.module.css";
-import MenuItemDesign from "./MenuItemDesign";
-import MenuItemProduct from "./MenuItemProduct";
 import SearchBox from "../SearchBox/SearchBox";
+import NavMenuItem from "./NavMenuItem";
+import MobileMenu from "./MobileMenu";
+import { PRODUCT_CATEGORIES } from "./categories";
 
-/* ================= TYPES ================= */
+const MOBILE_BREAKPOINT = 1200;
 
-type OpenMenu = "noithat" | "thietke" | null;
-
-/* ================= COMPONENT ================= */
-
-const NavBar: React.FC<NavBarProps> = ({ productItems, designItems }) => {
+const NavBar: React.FC = () => {
   const pathname = usePathname();
   const currentUser = useSelector((state: RootState) => state.login.user);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const [openMenu, setOpenMenu] = useState<OpenMenu>(null);
-
-  const showMainMenus = pathname === "/";
   const showCart = !pathname.startsWith("/auth");
-  const logo = "/logo/logo.png";
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > MOBILE_BREAKPOINT) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <nav className={styles.navbar}>
-      {/* Logo */}
+      {/* Logo — luôn hiển thị */}
       <div className={styles.leftGroup}>
         <Link href="/">
           <div className={styles.webNameLogo}>
-            {logo && <Image src={logo} alt="logo" width={60} height={60} />}
+            <Image src="/logo/logo.png" alt="logo" width={60} height={60} />
           </div>
         </Link>
-        <SearchBox />
+        {/* Ẩn SearchBox trên mobile bằng CSS (xem bên dưới) */}
+        <div className={styles.searchWrap}>
+          <SearchBox />
+        </div>
       </div>
 
-      {/* Main menus */}
-      {showMainMenus && (
-        <div className={styles.navItemGroup}>
-          {/* Nội thất */}
-          <div
-            className={styles.navItemWrapper}
-            onMouseEnter={() => setOpenMenu("noithat")}
-            onMouseLeave={() => setOpenMenu(null)}
-          >
-            <Link href="/" className={styles.navItem}>
-              Nội Thất
-            </Link>
+      {/* Menu desktop — ẩn trên mobile */}
+      <div className={styles.navItemGroup}>
+        {PRODUCT_CATEGORIES.map((cat) => (
+          <NavMenuItem
+            key={cat.slug}
+            label={cat.label}
+            slug={cat.slug}
+            room={cat.room}
+          />
+        ))}
+      </div>
 
-            <div
-              className={clsx(
-                styles.megaMenu,
-                openMenu === "noithat" && styles.open,
-              )}
-            >
-              <div className={styles.menuGrid}>
-                {productItems.map((item) => (
-                  <MenuItemProduct key={item._id} item={item} />
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Thiết kế */}
-          <div
-            className={styles.navItemWrapper}
-            onMouseEnter={() => setOpenMenu("thietke")}
-            onMouseLeave={() => setOpenMenu(null)}
-          >
-            <Link href="/" className={styles.navItem}>
-              Thiết Kế
-            </Link>
-
-            <div
-              className={clsx(
-                styles.megaMenu,
-                openMenu === "thietke" && styles.open,
-              )}
-            >
-              <div className={styles.menuGrid}>
-                {designItems.map((item) => (
-                  <MenuItemDesign key={item._id} item={item} />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Actions */}
+      {/* Actions desktop — ẩn trên mobile */}
       <div className={styles.navItemFunction}>
-        {/* <Link href="/">
-          <Search size={20} />
-        </Link> */}
-
         {showCart && (
           <Link href="/cart">
             <ShoppingCart size={20} />
           </Link>
         )}
-
         <Link href="/contact">
           <Phone size={20} />
         </Link>
-
         {currentUser ? (
           <Link href="/my-account" className={styles.navUser}>
             <User size={20} />
@@ -125,6 +85,20 @@ const NavBar: React.FC<NavBarProps> = ({ productItems, designItems }) => {
           </Link>
         )}
       </div>
+
+      {/* Nút Menu — chỉ hiện trên mobile */}
+      <button
+        className={styles.mobileMenuBtn}
+        onClick={() => setMobileMenuOpen(true)}
+        aria-label="Mở menu"
+      >
+        <Menu size={24} />
+      </button>
+
+      <MobileMenu
+        open={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+      />
     </nav>
   );
 };

@@ -1,0 +1,67 @@
+.action {
+  flex-shrink: 0; /* không bị co lại, không bị scroll cuốn theo */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 40px;
+  background: white;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+  z-index: 999;
+}
+
+.titleName {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.actionRight {
+  width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.actionSection {
+  color: var(--kds-color--color-active);
+  font-size: 25px;
+}
+
+.orderBtn {
+  background: #3e6ae1;
+  padding: 14px 32px;
+  border: none;
+  outline: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.orderBtn:disabled {
+  background: #a9b8de;
+  cursor: not-allowed;
+}
+
+@media (max-width: 900px) {
+  .action {
+    position: fixed; /* đổi từ sticky → fixed, neo theo viewport thật */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 12px 16px 30px 12px;
+  }
+
+  .titleName {
+    display: none;
+  }
+
+  .orderBtn {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+  .actionRight {
+    width: 100%;
+  }
+}

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import styles from "./ProductGrid.module.css";
+import Link from "next/link";
 
 interface Product {
   productId: string;

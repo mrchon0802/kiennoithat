@@ -1,10 +1,3 @@
-@import "./totalDetail.css";
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 html,
 body {
   min-height: 100vh;
@@ -17,8 +10,19 @@ html::-webkit-scrollbar,
 body::-webkit-scrollbar {
   display: none; /* Chrome, Safari */
 }
-.product-container {
+
+/* ── Container ngoài cùng: column, Action đứng yên bên dưới ── */
+.productContainer {
   height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column; /* đổi từ row → column */
+  overflow: hidden; /* đổi từ auto → hidden, vì giờ scroll nằm ở productWrapper */
+}
+
+/* ── Wrapper mới: chứa Image + Info, tự cuộn riêng ── */
+.productWrapper {
+  flex: 1;
+  min-height: 0; /* bắt buộc — cho phép overflow:auto hoạt động đúng trong flex column */
   display: flex;
   flex-direction: row;
   overflow: auto;
@@ -26,13 +30,12 @@ body::-webkit-scrollbar {
   -ms-overflow-style: none;
   gap: 30px;
 }
-.product-container::-webkit-scrollbar {
+.productWrapper::-webkit-scrollbar {
   display: none; /* Chrome, Safari */
 }
 
-.product-image {
+.productImage {
   flex: 1;
-  /* width: 78%; */
   height: auto;
   overflow: hidden;
   scrollbar-width: none;
@@ -41,10 +44,11 @@ body::-webkit-scrollbar {
   justify-content: center;
   align-items: center;
 }
-.product-image::-webkit-scrollbar {
+.productImage::-webkit-scrollbar {
   display: none; /* Chrome, Safari */
 }
-.image-wrapper {
+
+.imageWrapper {
   width: 100%;
   max-width: 1200px;
   aspect-ratio: 16/9;
@@ -54,7 +58,7 @@ body::-webkit-scrollbar {
   align-items: center;
   padding-left: 30px;
 }
-.image-wrapper img {
+.imageWrapper img {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -64,32 +68,19 @@ body::-webkit-scrollbar {
   opacity: 1;
   border-radius: 5px;
 }
-/* .image-wrapper img.fade-out {
-  opacity: 0;
-}
-.image-wrapper img.fade-in {
-  opacity: 1;
-}
-.image-wrapper img {
-  opacity: 0; mặc định ẩn 
-  transition: opacity 0.5s ease-in-out;
-} */
-.fade-img {
+
+.fadeImg {
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
 }
-
-.fade-img.show {
+.fadeImg.show {
   opacity: 1;
 }
-
-.fade-img.fade-out {
+.fadeImg.fade-out {
   opacity: 0;
 }
-.product-image::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
-}
-.product-info {
+
+.productInfo {
   width: 400px;
   flex-shrink: 0;
   display: flex;
@@ -101,11 +92,14 @@ body::-webkit-scrollbar {
   -ms-overflow-style: none;
   margin-right: 20px;
 }
-.product-info::-webkit-scrollbar {
+.productTitle {
+  font-size: 38px;
+}
+.productInfo::-webkit-scrollbar {
   display: none; /* Chrome, Safari */
 }
 
-.feature-detail-btn {
+.featureDetailBtn {
   padding: 10px 20px;
   min-width: 200px;
   margin: 30px auto;
@@ -117,25 +111,30 @@ body::-webkit-scrollbar {
   cursor: pointer;
 }
 
-/* ---------- DƯỚI 768px ---------- */
+/* ---------- DƯỚI 900px ---------- */
 @media (max-width: 900px) {
-  .product-container {
-    flex-direction: column;
+  .productContainer {
     height: auto;
     overflow: auto;
   }
 
-  .product-image {
+  .productWrapper {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .productImage {
     width: 100%;
     flex: none;
   }
-  .image-wrapper {
+  .imageWrapper {
     padding: 50px;
   }
-  .product-info {
+  .productInfo {
     width: 100%;
     margin-right: 0;
     padding: 20px;
+    padding-bottom: 90px; /* thêm — chừa chỗ cho .action fixed ở dưới */
     margin-top: 20px;
   }
 }

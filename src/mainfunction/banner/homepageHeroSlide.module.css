@@ -144,4 +144,17 @@ button.viewDetailBtn a {
   .control {
     display: none;
   }
+  .slideTitle h1 {
+    font-size: 30px;
+  }
+  .buttonGroup a {
+    font-size: 13px;
+    padding: 12px 40px;
+  }
+}
+@media (max-width: 480px) {
+  .buttonGroup a {
+    font-size: 13px;
+    padding: 12px 60px;
+  }
 }

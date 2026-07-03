@@ -1,17 +1,39 @@
 .container {
-  max-width: 1400px;
+  max-width: 1920px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 30px;
+  padding-inline: 50px;
+
   font-family: sans-serif;
 }
+
 .container h1 {
   margin-bottom: 30px;
+  font-size: clamp(20px, 2.5vw, 28px);
 }
+
 .grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 32px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(12px, 2vw, 28px);
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1400px) {
+  .grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
 }
 
 /* CARD */
@@ -30,13 +52,16 @@
   overflow: hidden;
   transition: 0.5s;
 }
+
 .card:hover .image {
   transform: scale(1.2);
 }
+
 .image {
   object-fit: cover;
   transition: 0.5s;
 }
+
 .info {
   display: flex;
   justify-content: center;
@@ -45,13 +70,26 @@
   gap: 10px;
   padding: 10px 20px;
 }
+
 .title {
   font-size: 15px;
   font-weight: 600;
   line-height: 1.4;
+  color: var(--kds-color--color-active);
 }
 
 .price {
   font-size: 14px;
   font-weight: 600;
+  color: var(--kds-color--color);
+}
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  display: flex; /* đổi từ block sang flex */
+  height: 100%; /* thêm dòng này — chiếm trọn chiều cao grid cell */
+}
+.emptyNote {
+  color: #999;
+  font-size: 15px;
 }

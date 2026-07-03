@@ -4,7 +4,6 @@ import React, { useCallback } from "react";
 import styles from "./styles/Action.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import { Button, Box } from "@mui/material";
 import { addToCart } from "@/store/cartSlice";
 import type { RootState, AppDispatch } from "@/store/store";
 import type { SelectingOrder } from "@/type/SelectingOrder";
@@ -12,13 +11,18 @@ import type { SelectingOrder } from "@/type/SelectingOrder";
 /* ===================== TYPES ===================== */
 
 interface ActionProps {
+  productTitle: string;
   finalPrice: number;
   selectingOrder: SelectingOrder | null;
 }
 
 /* ===================== COMPONENT ===================== */
 
-const Action: React.FC<ActionProps> = ({ finalPrice, selectingOrder }) => {
+const Action: React.FC<ActionProps> = ({
+  productTitle,
+  finalPrice,
+  selectingOrder,
+}) => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
@@ -60,23 +64,30 @@ const Action: React.FC<ActionProps> = ({ finalPrice, selectingOrder }) => {
   if (!finalPrice) return null;
 
   return (
-    <Box className={styles.action}>
-      <Box className={styles.actionSection}>
-        <span>
-          <strong>{finalPrice.toLocaleString()}</strong> VND
-        </span>
-      </Box>
+    <div className={styles.action}>
+      {/* Div 1 — tên sản phẩm */}
+      <div className={styles.titleName}>
+        <h3>{productTitle}</h3>
+      </div>
 
-      <Button
-        variant="contained"
-        color="primary"
-        className={styles.orderBtn}
-        onClick={handleSubmit}
-        disabled={!selectingOrder} // UX tốt hơn
-      >
-        Mua Ngay
-      </Button>
-    </Box>
+      {/* Div 2 — giá + nút Mua ngay */}
+      <div className={styles.actionRight}>
+        <div className={styles.actionSection}>
+          <span>
+            <strong>{finalPrice.toLocaleString("vi-VN")}</strong> vnd
+          </span>
+        </div>
+
+        <button
+          type="button"
+          className={styles.orderBtn}
+          onClick={handleSubmit}
+          disabled={!selectingOrder}
+        >
+          Mua Ngay
+        </button>
+      </div>
+    </div>
   );
 };
 
