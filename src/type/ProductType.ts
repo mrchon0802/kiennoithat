@@ -26,6 +26,14 @@ export interface ProductType {
   colors: ProductColor[];
 }
 
+/* ================= NORMALIZED SIZE (dữ liệu sau khi xử lý, dùng cho SizeOption) ================= */
+export interface DimensionOption {
+  values: number[];
+  selectable: boolean;
+}
+
+export type ProductSize = Record<string, DimensionOption>;
+
 /* ================= SUMMARY (dùng cho ProductGrid/ProductCard — chỉ cần vài field) ================= */
 export interface ProductSummary {
   productId: string;
