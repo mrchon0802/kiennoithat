@@ -28,7 +28,7 @@ export default function ProductGrid({
           {products.map((product) => (
             <Link
               key={product.productId}
-              href={`/product/${product.productId}`}
+              href={`/san-pham/${product.productId}`}
               className={styles.cardLink}
             >
               <ProductCard product={product} />
