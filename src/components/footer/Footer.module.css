@@ -4,6 +4,7 @@
   align-items: center;
   min-height: 60px;
   font-family: sans-serif;
+  padding: 10px 0;
 }
 .footerLink {
   display: flex;
@@ -16,4 +17,9 @@
   color: var(--kds-color--color);
   font-size: 13px;
   text-decoration: none;
+}
+@media (max-width: 640px) {
+  .footerLink {
+    flex-direction: column;
+  }
 }
