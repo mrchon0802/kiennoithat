@@ -1,6 +1,7 @@
 // app/(home)/CarouselContainer/CarouselSkeleton.tsx
 import styles from "./carouselContainer.module.css";
 import skeletonStyles from "./carouselSkeleton.module.css";
+import clsx from "clsx";
 
 export default function CarouselSkeleton() {
   return (
@@ -8,7 +9,18 @@ export default function CarouselSkeleton() {
       <div className={styles.carouselViewport}>
         <div className={styles.panelList}>
           <div
-            className={`${styles.productCardCarouselSlide} ${skeletonStyles.shimmer}`}
+            className={clsx(
+              styles.productCardCarouselSlide,
+              skeletonStyles.shimmer,
+              styles.active,
+            )}
+          />
+          <div
+            className={clsx(
+              styles.productCardCarouselSlide,
+              skeletonStyles.shimmer,
+              styles.next,
+            )}
           />
         </div>
 

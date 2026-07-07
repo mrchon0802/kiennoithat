@@ -1,4 +1,4 @@
-import EditInfo from "@/mainfunction/myaccount/accountsetting/personalinfomation/EditInfo";
+import EditInfo from "@/components/myaccount/accountsetting/personalinfomation/EditInfo";
 
 export default function EditInfoPage() {
   return <EditInfo />;

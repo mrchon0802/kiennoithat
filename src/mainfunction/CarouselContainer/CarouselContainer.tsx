@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import CarouselPanel from "./CarouselPanel";
 import styles from "./carouselContainer.module.css";
 import clsx from "clsx";
@@ -13,33 +19,65 @@ interface CarouselContainerProps {
 export default function CarouselContainer({ panels }: CarouselContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [translateX, setTranslateX] = useState(0);
-
-  const translateWidth = 1024 + 20;
-  const newTranslateWidth = translateWidth * 0.6;
+  const panelRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const panelListRef = useRef<HTMLDivElement>(null);
+  const gap = 20;
 
   const calculateTranslateX = useCallback(
     (targetIndex: number) => {
-      if (targetIndex === 0) return 0;
+      const viewport = viewportRef.current;
+      const panelList = panelListRef.current;
+      const targetPanel = panelRefs.current[targetIndex];
+      if (!viewport || !panelList || !targetPanel) return 0;
 
-      let total = 0;
+      const style = getComputedStyle(viewport);
+      const paddingLeft = parseFloat(style.paddingLeft) || 0;
+      const paddingRight = parseFloat(style.paddingRight) || 0;
+      const visibleWidth = viewport.clientWidth - paddingLeft - paddingRight;
+
+      const totalWidth = panelList.scrollWidth;
+      const maxTranslate = Math.max(0, totalWidth - visibleWidth);
+
+      // Tổng width (+ gap) của các panel đứng trước targetIndex
+      let offsetBefore = 0;
       for (let i = 0; i < targetIndex; i++) {
-        const useNewWidth = i === 0 || i === panels.length - 2;
-        total += useNewWidth ? newTranslateWidth : translateWidth;
+        offsetBefore += (panelRefs.current[i]?.offsetWidth ?? 0) + gap;
       }
-      return -total;
+
+      const targetWidth = targetPanel.offsetWidth;
+
+      // Canh panel active vào giữa viewport
+      const centered = offsetBefore - (visibleWidth - targetWidth) / 2;
+
+      // Clamp: không cho vượt quá 2 biên [0, maxTranslate]
+      // -> tự động xử lý đúng cả 2 trạng thái đầu/cuối
+      const clamped = Math.min(Math.max(centered, 0), maxTranslate);
+
+      return -clamped;
     },
-    [newTranslateWidth, panels.length, translateWidth],
+    [gap],
   );
 
-  useEffect(() => {
+  const recalculate = useCallback(() => {
     setTranslateX(calculateTranslateX(currentIndex));
   }, [calculateTranslateX, currentIndex]);
 
+  useLayoutEffect(() => {
+    recalculate();
+  }, [recalculate]);
+
+  useEffect(() => {
+    window.addEventListener("resize", recalculate);
+    return () => window.removeEventListener("resize", recalculate);
+  }, [recalculate]);
+
   return (
     <div className={styles.carouselContainer}>
-      <div className={styles.carouselViewport}>
+      <div className={styles.carouselViewport} ref={viewportRef}>
         <div
           className={styles.panelList}
+          ref={panelListRef}
           style={{
             transform: `translateX(${translateX}px)`,
             transition: "transform 0.5s ease-in-out",
@@ -48,6 +86,9 @@ export default function CarouselContainer({ panels }: CarouselContainerProps) {
           {panels.map((panel, index) => (
             <CarouselPanel
               key={panel.productId}
+              ref={(el) => {
+                panelRefs.current[index] = el;
+              }}
               item={panel}
               isActive={index === currentIndex}
               isPrev={index === currentIndex - 1}

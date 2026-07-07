@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CarouselPanel from "./CarouselPanel";
 import styles from "./homepageHeroSlide.module.css";
 import clsx from "clsx";

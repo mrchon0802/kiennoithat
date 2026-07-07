@@ -1,4 +1,4 @@
-import AccountSetting from "@/mainfunction/myaccount/accountsetting/AccountSetting";
+import AccountSetting from "@/components/myaccount/accountsetting/AccountSetting";
 import { ReactNode } from "react";
 
 interface AccountSettingLayoutProps {

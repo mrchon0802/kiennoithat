@@ -7,7 +7,7 @@ export default function ProductGridSkeleton() {
     <div className={styles.container}>
       <h1>Các sản phẩm nổi bật</h1>
       <section className={styles.grid}>
-        {Array.from({ length: 10 }).map((_, i) => (
+        {Array.from({ length: 20 }).map((_, i) => (
           <ProductCardSkeleton key={i} />
         ))}
       </section>

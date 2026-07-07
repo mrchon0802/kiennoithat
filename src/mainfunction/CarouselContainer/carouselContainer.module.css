@@ -17,12 +17,13 @@
 }
 .productCardCarouselSlide {
   position: relative;
-  width: 1024px;
+  /* width: 1024px; */
   height: 580px;
   flex-shrink: 0;
   overflow: hidden;
   /* margin: 0 30px; */
   border-radius: 12px;
+  width: clamp(700px, 75vw, 1200px);
 }
 
 .reactImage {

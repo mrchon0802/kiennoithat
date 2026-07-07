@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { forwardRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import clsx from "clsx";
@@ -17,60 +17,57 @@ interface CarouselPanelProps {
   onNext: () => void;
 }
 
-const CarouselPanel: React.FC<CarouselPanelProps> = ({
-  item,
-  isActive,
-  isPrev,
-  isNext,
-  onPrev,
-  onNext,
-}) => {
-  const handleClick = () => {
-    if (isPrev) onPrev();
-    if (isNext) onNext();
-  };
+const CarouselPanel = forwardRef<HTMLDivElement, CarouselPanelProps>(
+  ({ item, isActive, isPrev, isNext, onPrev, onNext }, ref) => {
+    const handleClick = () => {
+      if (isPrev) onPrev();
+      if (isNext) onNext();
+    };
 
-  const { image, title, productId } = item;
+    const { image, title, productId } = item;
 
-  return (
-    <div
-      className={clsx(
-        styles.productCardCarouselSlide,
-        isActive ? styles.active : styles.inActive,
-        isPrev && styles.prev,
-        isNext && styles.next,
-      )}
-      onClick={!isActive ? handleClick : undefined}
-      style={{ cursor: isActive ? "default" : "pointer" }}
-    >
-      <div className={styles.reactImage}>
-        <Image
-          src={image}
-          alt={title}
-          width={1024}
-          height={580}
-          priority={isActive}
-        />
-      </div>
-
-      <div className={styles.moduleContent}>
-        <div className={styles.slideTitle}>
-          <h1>{title}</h1>
+    return (
+      <div
+        ref={ref}
+        className={clsx(
+          styles.productCardCarouselSlide,
+          isActive ? styles.active : styles.inActive,
+          isPrev && styles.prev,
+          isNext && styles.next,
+        )}
+        onClick={!isActive ? handleClick : undefined}
+        style={{ cursor: isActive ? "default" : "pointer" }}
+      >
+        <div className={styles.reactImage}>
+          <Image
+            src={image}
+            alt={title}
+            width={1024}
+            height={580}
+            priority={isActive}
+          />
         </div>
 
-        <div
-          className={styles.buttonGroup}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <Link href={`san-pham/${productId}`} className={styles.orderNowBtn}>
-            Mua ngay
-          </Link>
+        <div className={styles.moduleContent}>
+          <div className={styles.slideTitle}>
+            <h1>{title}</h1>
+          </div>
 
-          <button className={styles.learnMoreBtn}>Learn more</button>
+          <div
+            className={styles.buttonGroup}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Link href={`san-pham/${productId}`} className={styles.orderNowBtn}>
+              Mua ngay
+            </Link>
+            <button className={styles.learnMoreBtn}>Learn more</button>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  },
+);
+
+CarouselPanel.displayName = "CarouselPanel";
 
 export default CarouselPanel;

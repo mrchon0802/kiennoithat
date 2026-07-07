@@ -1,4 +1,4 @@
-import Security from "@/mainfunction/myaccount/accountsetting/Security";
+import Security from "@/components/myaccount/accountsetting/Security";
 
 export default function SecurityPage() {
   return <Security />;

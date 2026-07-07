@@ -5,6 +5,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 import styles from "./styles/ProductDetail.module.css";
+import ProductImageSkeleton from "./ProductImageSkeleton";
 
 const IMAGE_FADE_MS = 300;
 
@@ -43,7 +44,7 @@ function ProductImage({ productImage, productTitle }: ProductImageProps) {
   return (
     <div className={styles.productImage}>
       <div className={styles.imageWrapper}>
-        {!imgVisible && <div className={styles.imageSkeleton} />}
+        {!imgVisible && <ProductImageSkeleton />}
 
         {imgSrc && (
           <Image
