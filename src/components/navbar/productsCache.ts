@@ -10,8 +10,7 @@ export interface Product {
   type: string;
 }
 
-const apiUrl =
-  process.env.NEXT_PUBLIC_SERVER_API_URL || "http://localhost:5000";
+const apiUrl = process.env.NEXT_PUBLIC__API_URL || "http://localhost:5000";
 
 let allProductsCache: Product[] | null = null;
 let fetchPromise: Promise<Product[]> | null = null;
