@@ -1,5 +1,5 @@
 // app/san-pham/page.tsx
-import ProductGrid from "@/mainfunction/ProductGrid/ProductGrid";
+import ProductGrid from "@/homepage/ProductGrid/ProductGrid";
 
 interface Product {
   productId: string;

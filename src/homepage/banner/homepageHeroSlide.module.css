@@ -153,8 +153,26 @@ button.viewDetailBtn a {
   }
 }
 @media (max-width: 480px) {
+  .moduleContent {
+    padding: 24px 16px;
+    gap: 12px;
+  }
+
+  .componentHeading span {
+    font-size: 15px;
+    text-align: center;
+  }
+
+  .buttonGroup {
+    width: 100%;
+    gap: 10px;
+  }
+
   .buttonGroup a {
+    flex: 1;                 /* 2 nút rộng bằng nhau */
+    padding: 12px 8px;       /* bỏ padding ngang lớn */
     font-size: 13px;
-    padding: 12px 60px;
+    text-align: center;
+    white-space: nowrap;     /* không cho chữ xuống dòng */
   }
 }

@@ -35,9 +35,27 @@
     grid-template-columns: repeat(5, 1fr);
   }
 }
+@media (max-width: 639px) {
+  .container {
+    padding-inline: 12px;
+  }
+  .info {
+    padding: 8px 10px;
+  }
 
+  .title {
+    font-size: 13px;
+  }
+
+  .price {
+    font-size: 13px;
+  }
+}
 /* CARD */
 .card {
+  display: flex;
+  flex-direction: column; /* để info giãn hết phần còn lại */
+  height: 100%;
   cursor: pointer;
   background: #f6f6f6;
   width: 100%;
@@ -63,23 +81,28 @@
 }
 
 .info {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+ display: flex;
   flex-direction: column;
-  gap: 10px;
+  flex: 1; /* chiếm hết chiều cao còn lại của card */
+  gap: 6px;
   padding: 10px 20px;
 }
 
 .title {
+
   font-size: 15px;
   font-weight: 600;
   line-height: 1.4;
   color: var(--kds-color--color-active);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .price {
   font-size: 14px;
+  margin-top: auto;
   font-weight: 600;
   color: var(--kds-color--color);
 }
