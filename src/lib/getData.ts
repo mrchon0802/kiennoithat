@@ -1,5 +1,8 @@
-// lib/getData.ts
-const apiUrl = process.env.SERVER_API_URL || "http://localhost:5000";
+
+const apiUrl =
+  process.env.SERVER_API_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://localhost:5000";
 
 export async function getData(
   endpoint: string,
@@ -14,13 +17,16 @@ export async function getData(
       });
 
       if (!res.ok) {
-        console.error(`Failed to fetch ${endpoint}: ${res.status}`);
+        console.error(
+          `Failed to fetch ${endpoint}: ${res.status}`,
+        );
         return [];
       }
 
-      return res.json();
+      return await res.json();
     } catch (error) {
       const isLastAttempt = attempt === retries;
+
       console.error(
         `Error fetching ${endpoint} (attempt ${attempt + 1}/${retries + 1}):`,
         error,
@@ -28,7 +34,9 @@ export async function getData(
 
       if (isLastAttempt) return [];
 
-      await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
+      await new Promise((r) =>
+        setTimeout(r, 500 * (attempt + 1)),
+      );
     }
   }
 
