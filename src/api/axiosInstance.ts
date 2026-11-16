@@ -1,3 +1,4 @@
+import type { AuthUser } from "@/type/Login";
 import axios, {
   AxiosError,
   AxiosInstance,
@@ -14,16 +15,16 @@ const axiosInstance: AxiosInstance = axios.create({
   withCredentials: true,
 });
 
-let refreshPromise: Promise<AxiosResponse<{ user: unknown }>> | null = null;
+let refreshPromise: Promise<AxiosResponse<{ user: AuthUser }>> | null = null;
 
 /**
  * Dùng chung một refresh request cho cả interceptor và AuthInitializer.
  * Backend lưu refresh_token trong HTTP-only cookie và trả về { user }.
  */
-export const refreshSession = (): Promise<AxiosResponse<{ user: unknown }>> => {
+export const refreshSession = (): Promise<AxiosResponse<{ user: AuthUser }>> => {
   if (!refreshPromise) {
     refreshPromise = axiosInstance
-      .post<{ user: unknown }>("/auth/refresh")
+      .post<{ user: AuthUser }>("/auth/refresh")
       .finally(() => {
         refreshPromise = null;
       });
