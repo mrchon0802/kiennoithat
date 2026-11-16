@@ -102,6 +102,7 @@ export function useProductSelection(product: ProductType) {
     return {
       productId: product._id ?? product.productId,
       name: product.title,
+      image: selectedColor.productImage || product.image,
       price: finalPrice,
       size: fullSize,
       weight: Number(product.weight) || 0,

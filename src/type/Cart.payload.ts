@@ -1,3 +1,17 @@
+export interface CartItemPayload {
+  productId: string;
+  name: string;
+  image: string;
+  price: number;
+  weight: number;
+  length: number;
+  width: number;
+  height: number;
+  size: string;
+  color: string;
+  quantity: number;
+}
+
 export interface UpdateCartItemPayload {
   productId: string;
   size: string;
@@ -11,7 +25,7 @@ export interface UpdateCartPayload extends UpdateCartItemPayload {
 
 export interface AddToCartPayload {
   userId: string;
-  items: UpdateCartItemPayload[];
+  items: CartItemPayload[];
 }
 
 export interface RemoveCartItemPayload {

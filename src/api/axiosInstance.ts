@@ -5,56 +5,68 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 
-/* ===================== EXTEND TYPE ===================== */
-/**
- * Mở rộng config để thêm _retry
- */
 interface RetryRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
-
-/* ===================== INSTANCE ===================== */
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000",
   withCredentials: true,
 });
 
-/* ===================== RESPONSE INTERCEPTOR ===================== */
+let refreshPromise: Promise<AxiosResponse<{ user: unknown }>> | null = null;
+
+/**
+ * Dùng chung một refresh request cho cả interceptor và AuthInitializer.
+ * Backend lưu refresh_token trong HTTP-only cookie và trả về { user }.
+ */
+export const refreshSession = (): Promise<AxiosResponse<{ user: unknown }>> => {
+  if (!refreshPromise) {
+    refreshPromise = axiosInstance
+      .post<{ user: unknown }>("/auth/refresh")
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+
+  return refreshPromise;
+};
+
+const isAuthEndpoint = (url?: string): boolean => {
+  if (!url) return false;
+  const path = url.split("?")[0].replace(/\/$/, "");
+  return (
+    path.endsWith("/auth/login") ||
+    path.endsWith("/auth/refresh") ||
+    path.endsWith("/auth/logout")
+  );
+};
 
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => response,
-
   async (error: AxiosError) => {
-    const originalRequest = error.config as RetryRequestConfig;
+    const originalRequest = error.config as RetryRequestConfig | undefined;
 
-    // Nếu không có response → lỗi network
-    if (!error.response) {
+    if (!originalRequest || !error.response) {
       return Promise.reject(error);
     }
 
-    // 401 + chưa retry + không phải refresh API
     if (
-      error.response.status === 401 &&
-      originalRequest.url !== "/auth/refresh" &&
-      !originalRequest._retry
+      error.response.status !== 401 ||
+      originalRequest._retry ||
+      isAuthEndpoint(originalRequest.url)
     ) {
-      originalRequest._retry = true;
-
-      try {
-        console.log("🔄 Token hết hạn, đang refresh...");
-
-        await axiosInstance.post("/auth/refresh");
-
-        console.log("✅ Refresh thành công, retry request cũ");
-        return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        console.error("❌ Refresh token thất bại:", refreshError);
-        return Promise.reject(refreshError);
-      }
+      return Promise.reject(error);
     }
 
-    return Promise.reject(error);
+    originalRequest._retry = true;
+
+    try {
+      await refreshSession();
+      return axiosInstance(originalRequest);
+    } catch (refreshError) {
+      return Promise.reject(refreshError);
+    }
   },
 );
 

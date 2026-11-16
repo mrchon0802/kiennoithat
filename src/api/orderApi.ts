@@ -1,40 +1,56 @@
-import axios from "axios";
-import type { Order, OrderStatus, CreateOrderPayload } from "@/type/Order";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
+import axiosInstance from "./axiosInstance";
+import type {
+  Order, OrderStatus, CreateOrderPayload, CreateOrderResponse,
+  OrderDetailResponse, PaymentMethod,
+} from "@/type/Order";
 
 export const orderApi = {
-  create: async (orderData: CreateOrderPayload): Promise<Order> => {
-    const res = await axios.post<Order>(`${API_URL}/orders`, orderData);
+  create: async (payload: CreateOrderPayload): Promise<CreateOrderResponse> => {
+    const res = await axiosInstance.post<CreateOrderResponse>("/orders", payload);
     return res.data;
   },
-
   getAll: async (): Promise<Order[]> => {
-    const res = await axios.get<Order[]>(`${API_URL}/orders`);
+    const res = await axiosInstance.get<Order[]>("/orders");
     return res.data;
   },
-
-  getByUser: async (userId: string): Promise<Order[]> => {
-    const res = await axios.get<Order[]>(`${API_URL}/orders/user/${userId}`);
+  getMine: async (): Promise<Order[]> => {
+    const res = await axiosInstance.get<Order[]>("/orders/my-orders");
     return res.data;
   },
-
-  updateStatus: async (
-    orderId: string,
-    status: OrderStatus,
-  ): Promise<Order> => {
-    const res = await axios.patch<Order>(
-      `${API_URL}/orders/${orderId}/status`,
-      { status },
-    );
+  getById: async (orderId: string): Promise<OrderDetailResponse> => {
+    const res = await axiosInstance.get<OrderDetailResponse>(`/orders/${orderId}`);
     return res.data;
   },
-
-  remove: async (orderId: string): Promise<void> => {
-    await axios.delete(`${API_URL}/orders/${orderId}`);
+  updateStatus: async (orderId: string, status: OrderStatus, note?: string): Promise<Order> => {
+    const res = await axiosInstance.patch<Order>(`/orders/${orderId}/status`, { status, note });
+    return res.data;
   },
-
-  clearAll: async (): Promise<void> => {
-    await axios.delete(`${API_URL}/orders`);
+  requestCancellation: async (orderId: string, reason: string): Promise<Order> => {
+    const res = await axiosInstance.post<Order>(`/orders/${orderId}/cancellation-request`, { reason });
+    return res.data;
+  },
+  reviewCancellation: async (orderId: string, decision: "approved" | "rejected", note?: string): Promise<Order> => {
+    const res = await axiosInstance.patch<Order>(`/orders/${orderId}/cancellation`, { decision, note });
+    return res.data;
+  },
+  setDeposit: async (orderId: string, amount: number): Promise<unknown> => {
+    const res = await axiosInstance.patch(`/orders/${orderId}/payment/deposit`, { amount });
+    return res.data;
+  },
+  addTransaction: async (orderId: string, data: { amount: number; method: PaymentMethod; reference?: string; note?: string }): Promise<unknown> => {
+    const res = await axiosInstance.post(`/orders/${orderId}/payment/transactions`, data);
+    return res.data;
+  },
+  addRefund: async (orderId: string, data: { amount: number; reason: string }): Promise<unknown> => {
+    const res = await axiosInstance.post(`/orders/${orderId}/payment/refunds`, data);
+    return res.data;
+  },
+  createDelivery: async (orderId: string, data: { scheduledDate: string; timeSlot?: string; note?: string }): Promise<unknown> => {
+    const res = await axiosInstance.post(`/orders/${orderId}/deliveries`, data);
+    return res.data;
+  },
+  updateDelivery: async (orderId: string, deliveryId: string, data: { status: string; scheduledDate?: string; timeSlot?: string; note?: string; failureReason?: string }): Promise<unknown> => {
+    const res = await axiosInstance.patch(`/orders/${orderId}/deliveries/${deliveryId}`, data);
+    return res.data;
   },
 };

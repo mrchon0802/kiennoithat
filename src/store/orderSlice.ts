@@ -1,149 +1,62 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { orderApi } from "@/api/orderApi";
-import type {
-  Order,
-  OrderState,
-  CreateOrderPayload,
-  OrderStatus,
-} from "@/type/Order";
+import type { Order, OrderState, CreateOrderPayload, OrderStatus, CreateOrderResponse } from "@/type/Order";
 
-/** Tạo đơn hàng mới */
-export const createOrder = createAsyncThunk<
-  Order,
-  CreateOrderPayload,
-  { rejectValue: string }
->("order/create", async (orderData, { rejectWithValue }) => {
-  try {
-    return await orderApi.create(orderData);
-  } catch (err: any) {
-    return rejectWithValue(err.response?.data ?? "Create order failed");
-  }
-});
+export const createOrder = createAsyncThunk<CreateOrderResponse, CreateOrderPayload, { rejectValue: string }>(
+  "order/create",
+  async (payload, { rejectWithValue }) => {
+    try { return await orderApi.create(payload); }
+    catch (err: any) { return rejectWithValue(err.response?.data?.message ?? "Không thể tạo đơn hàng"); }
+  },
+);
 
-/** Lấy đơn hàng theo user */
-export const fetchOrdersByUser = createAsyncThunk<
-  Order[],
-  string,
-  { rejectValue: string }
->("order/fetchByUser", async (userId, { rejectWithValue }) => {
-  try {
-    return await orderApi.getByUser(userId);
-  } catch (err: any) {
-    return rejectWithValue(err.response?.data ?? "Fetch user orders failed");
-  }
-});
+export const fetchOrdersByUser = createAsyncThunk<Order[], void, { rejectValue: string }>(
+  "order/fetchMine",
+  async (_, { rejectWithValue }) => {
+    try { return await orderApi.getMine(); }
+    catch (err: any) { return rejectWithValue(err.response?.data?.message ?? "Không thể tải đơn hàng"); }
+  },
+);
 
-/** Admin – lấy tất cả đơn hàng */
-export const fetchAllOrders = createAsyncThunk<
-  Order[],
-  void,
-  { rejectValue: string }
->("order/fetchAll", async (_, { rejectWithValue }) => {
-  try {
-    return await orderApi.getAll();
-  } catch (err: any) {
-    return rejectWithValue(err.response?.data ?? "Fetch all orders failed");
-  }
-});
+export const fetchAllOrders = createAsyncThunk<Order[], void, { rejectValue: string }>(
+  "order/fetchAll",
+  async (_, { rejectWithValue }) => {
+    try { return await orderApi.getAll(); }
+    catch (err: any) { return rejectWithValue(err.response?.data?.message ?? "Không thể tải đơn hàng"); }
+  },
+);
 
-/** Cập nhật trạng thái đơn hàng */
-export const updateOrderStatus = createAsyncThunk<
-  Order,
-  { orderId: string; status: OrderStatus },
-  { rejectValue: string }
->("order/updateStatus", async ({ orderId, status }, { rejectWithValue }) => {
-  try {
-    return await orderApi.updateStatus(orderId, status);
-  } catch (err: any) {
-    return rejectWithValue(err.response?.data ?? "Update status failed");
-  }
-});
+export const updateOrderStatus = createAsyncThunk<Order, { orderId: string; status: OrderStatus; note?: string }, { rejectValue: string }>(
+  "order/updateStatus",
+  async ({ orderId, status, note }, { rejectWithValue }) => {
+    try { return await orderApi.updateStatus(orderId, status, note); }
+    catch (err: any) { return rejectWithValue(err.response?.data?.message ?? "Không thể cập nhật trạng thái"); }
+  },
+);
 
-/** Xóa đơn hàng */
-export const deleteOrder = createAsyncThunk<
-  string,
-  string,
-  { rejectValue: string }
->("order/delete", async (orderId, { rejectWithValue }) => {
-  try {
-    await orderApi.remove(orderId);
-    return orderId;
-  } catch (err: any) {
-    return rejectWithValue(err.response?.data ?? "Delete order failed");
-  }
-});
-
-const initialState: OrderState = {
-  orders: [],
-  loading: false,
-  error: null,
-};
-
+const initialState: OrderState = { orders: [], loading: false, error: null };
 const orderSlice = createSlice({
   name: "order",
   initialState,
-  reducers: {},
+  reducers: {
+    clearOrderError(state) { state.error = null; },
+  },
   extraReducers: (builder) => {
     builder
-      /** Fetch by user */
-      .addCase(fetchOrdersByUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(
-        fetchOrdersByUser.fulfilled,
-        (state, action: PayloadAction<Order[]>) => {
-          state.loading = false;
-          state.orders = action.payload;
-        },
-      )
-      .addCase(fetchOrdersByUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload ?? "Error";
-      })
-
-      /** Create order */
-      .addCase(createOrder.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(createOrder.fulfilled, (state, action: PayloadAction<Order>) => {
-        state.loading = false;
-        state.orders.unshift(action.payload);
-      })
-      .addCase(createOrder.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload ?? "Error";
-      })
-
-      /** Update status */
-      .addCase(
-        updateOrderStatus.fulfilled,
-        (state, action: PayloadAction<Order>) => {
-          const index = state.orders.findIndex(
-            (o) => o._id === action.payload._id,
-          );
-          if (index !== -1) {
-            state.orders[index] = action.payload;
-          }
-        },
-      )
-
-      /** Delete */
-      .addCase(
-        deleteOrder.fulfilled,
-        (state, action: PayloadAction<string>) => {
-          state.orders = state.orders.filter((o) => o._id !== action.payload);
-        },
-      )
-
-      /** Admin fetch all */
-      .addCase(
-        fetchAllOrders.fulfilled,
-        (state, action: PayloadAction<Order[]>) => {
-          state.orders = action.payload;
-        },
-      );
+      .addCase(fetchOrdersByUser.pending, (s) => { s.loading = true; s.error = null; })
+      .addCase(fetchOrdersByUser.fulfilled, (s, a: PayloadAction<Order[]>) => { s.loading = false; s.orders = a.payload; })
+      .addCase(fetchOrdersByUser.rejected, (s, a) => { s.loading = false; s.error = a.payload ?? "Lỗi tải đơn hàng"; })
+      .addCase(fetchAllOrders.pending, (s) => { s.loading = true; s.error = null; })
+      .addCase(fetchAllOrders.fulfilled, (s, a: PayloadAction<Order[]>) => { s.loading = false; s.orders = a.payload; })
+      .addCase(fetchAllOrders.rejected, (s, a) => { s.loading = false; s.error = a.payload ?? "Lỗi tải đơn hàng"; })
+      .addCase(createOrder.pending, (s) => { s.loading = true; s.error = null; })
+      .addCase(createOrder.fulfilled, (s, a) => { s.loading = false; s.orders.unshift(a.payload.order); })
+      .addCase(createOrder.rejected, (s, a) => { s.loading = false; s.error = a.payload ?? "Lỗi tạo đơn hàng"; })
+      .addCase(updateOrderStatus.fulfilled, (s, a) => {
+        const i = s.orders.findIndex((o) => o._id === a.payload._id);
+        if (i >= 0) s.orders[i] = a.payload;
+      });
   },
 });
-
+export const { clearOrderError } = orderSlice.actions;
 export default orderSlice.reducer;

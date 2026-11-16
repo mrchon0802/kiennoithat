@@ -1,4 +1,4 @@
-import Home from "../src/homepage/Home";
+import Home from "../homepage/Home";
 import Footer from "@/components/footer/Footer";
 
 export default function IndexPage() {

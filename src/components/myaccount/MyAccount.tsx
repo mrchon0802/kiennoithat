@@ -9,6 +9,7 @@ import type { AppDispatch } from "@/store/store";
 
 import styles from "./MyAccount.module.css";
 import { logout } from "../../store/loginSlice";
+import { userApi } from "@/api/userApi";
 import Sidebar from "./SideBar";
 
 import {
@@ -50,9 +51,15 @@ const MyAccount: React.FC<MyAccountProps> = ({ children }) => {
 
   /* ===================== HANDLERS ===================== */
 
-  const handleLogout = () => {
-    dispatch(logout());
-    router.push("/");
+  const handleLogout = async () => {
+    try {
+      await userApi.logout();
+    } catch (error) {
+      console.error("Logout API failed:", error);
+    } finally {
+      dispatch(logout());
+      router.replace("/");
+    }
   };
 
   useEffect(() => {

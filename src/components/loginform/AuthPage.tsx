@@ -52,7 +52,9 @@ const LoginForm: React.FC = () => {
 
   const onSubmit: SubmitHandler<LoginFormValues> = (data) => {
     dispatch(setEmailLogin(data.email));
-    router.push("/auth/login");
+    const returnTo = new URLSearchParams(window.location.search).get("returnTo");
+    const query = returnTo ? `?returnTo=${encodeURIComponent(returnTo)}` : "";
+    router.push(`/auth/login${query}`);
   };
 
   return (
@@ -107,7 +109,11 @@ const LoginForm: React.FC = () => {
           color: "var(--kds-color--color)",
           background: "#eee",
         }}
-        onClick={() => router.push("/auth/register/step-1")}
+        onClick={() => {
+          const returnTo = new URLSearchParams(window.location.search).get("returnTo");
+          const query = returnTo ? `?returnTo=${encodeURIComponent(returnTo)}` : "";
+          router.push(`/auth/register/step-1${query}`);
+        }}
       >
         Tạo Tài Khoản
       </Button>

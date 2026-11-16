@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import clsx from "clsx";
 
-import { userApi } from "@/api/userApi";
+import { userApi, type CreateUserPayload } from "@/api/userApi";
 import { clearRegisterForm, createUser } from "../../store/userSlice";
 import { loginStart, loginSuccess, loginFailure } from "../../store/loginSlice";
 
@@ -43,8 +43,19 @@ const RegisterStepThree: React.FC = () => {
     try {
       dispatch(loginStart());
 
-      // 1. Tạo user
-      const newUser = await dispatch(createUser(registerForm)).unwrap();
+      // 1. Chỉ gửi các trường được backend chấp nhận khi tạo tài khoản.
+      // Không gửi _id rỗng, confirmPassword hoặc role từ form đăng ký.
+      const userPayload: CreateUserPayload = {
+        firstName: registerForm.firstName,
+        lastName: registerForm.lastName,
+        email: registerForm.email,
+        password: registerForm.password,
+        ...(registerForm.phoneNumber
+          ? { phoneNumber: registerForm.phoneNumber }
+          : {}),
+      };
+
+      const newUser = await dispatch(createUser(userPayload)).unwrap();
       console.log("✅ User created:", newUser);
 
       // 2. Auto login sau khi đăng ký
@@ -58,7 +69,12 @@ const RegisterStepThree: React.FC = () => {
       // 3. Clear register form
       dispatch(clearRegisterForm());
 
-      router.push("/my-account");
+      const requestedReturnTo = new URLSearchParams(window.location.search).get("returnTo");
+      const returnTo =
+        requestedReturnTo && requestedReturnTo.startsWith("/") && !requestedReturnTo.startsWith("//")
+          ? requestedReturnTo
+          : "/my-account";
+      router.replace(returnTo);
     } catch (err: unknown) {
       console.error("❌ Lỗi khi đăng ký:", err);
       dispatch(loginFailure("Đăng ký thất bại"));

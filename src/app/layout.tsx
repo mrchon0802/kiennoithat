@@ -4,7 +4,7 @@ import { Providers } from "@/store/Providers";
 import AuthInitializer from "@/components/loginform/AuthInitializer";
 import { Analytics } from "@vercel/analytics/react";
 
-import "../styles/globals.css";
+import "../../styles/globals.css";
 
 export const metadata: Metadata = {
   title: "Kiennoithat.com",

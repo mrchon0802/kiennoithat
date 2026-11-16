@@ -13,10 +13,13 @@ import {
 } from "@/store/cartSlice";
 import { createOrder } from "@/store/orderSlice";
 import styles from "./Cart.module.css";
-import { Trash } from "lucide-react";
+import { Trash, ShoppingBag } from "lucide-react";
 import { debounce } from "lodash";
 import Image from "next/image";
 import type { ShoppingCartItem } from "@/type/Cart.ui";
+import type { PaymentMethod } from "@/type/Order";
+
+const ShoppingBagIcon = () => <ShoppingBag size={34} strokeWidth={1.5} />;
 
 const Cart: React.FC = () => {
   const router = useRouter();
@@ -26,23 +29,29 @@ const Cart: React.FC = () => {
     (state: RootState) => state.cart,
   );
   const currentUser = useSelector((state: RootState) => state.login.user);
+  const authInitialized = useSelector(
+    (state: RootState) => state.login.initialized,
+  );
 
   const fullAddress = currentUser?.fullAddress ?? "";
 
-  // redirect
+  // Wait for cookie-based session restoration before redirecting guests.
   useEffect(() => {
-    if (!currentUser) router.push("/auth");
-    else if (!fullAddress) router.push("/account-settings/personal-infomation");
-  }, [currentUser, fullAddress, router]);
+    if (authInitialized && !currentUser) {
+      router.replace(`/auth?returnTo=${encodeURIComponent("/cart")}`);
+    }
+  }, [authInitialized, currentUser, router]);
 
-  // fetch cart
+  // Fetch only after the auth restoration check is complete.
   useEffect(() => {
-    if (currentUser?._id) {
+    if (authInitialized && currentUser?._id) {
       dispatch(fetchCart(currentUser._id));
     }
-  }, [dispatch, currentUser?._id]);
+  }, [dispatch, authInitialized, currentUser?._id]);
 
   const [shippingFees, setShippingFees] = useState<number[]>([]);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
+  const [submitting, setSubmitting] = useState(false);
 
   const fromDistrictId = Number(process.env.NEXT_PUBLIC_GHN_SHOP_DISTRICT_ID);
   const toDistrictId = Number(currentUser?.toDistrictId);
@@ -154,113 +163,244 @@ const Cart: React.FC = () => {
   };
 
   const handleSubmitOrder = async () => {
-    if (!currentUser?._id) return;
+    if (!currentUser?._id || !cart.length || submitting) return;
+    if (!fullAddress || !toDistrictId || !toWardCode || !currentUser.phoneNumber) {
+      router.push("/account-settings/personal-infomation");
+      return;
+    }
+
+    const subtotal = itemsWithTotal.reduce((sum, item) => sum + item.itemSubtotal, 0);
+    const shippingFee = itemsWithTotal.reduce((sum, item) => sum + item.shipping, 0);
     const orderItems = cart.map((item) => ({
       productId: item.productId,
-      title: item.name,
-      price: item.price,
-      quantity: item.quantity,
-      size: item.size,
-      color: item.color,
+      name: item.name,
+      image: item.image,
+      price: Number(item.price),
+      quantity: Number(item.quantity),
+      size: item.size ?? "",
+      color: item.color ?? "",
     }));
-    const result = await dispatch(
-      createOrder({
-        userId: currentUser._id,
-        items: orderItems,
-        shippingFee: grandTotal,
-        totalPrice: grandTotal,
-      }),
-    );
 
-    if (result.meta.requestStatus === "fulfilled") {
+    setSubmitting(true);
+    try {
+      const result = await dispatch(createOrder({
+        items: orderItems,
+        shippingAddress: {
+          fullName: [currentUser.firstName, currentUser.lastName].filter(Boolean).join(" ") || currentUser.email,
+          phoneNumber: currentUser.phoneNumber,
+          address: fullAddress,
+          districtId: toDistrictId,
+          wardCode: toWardCode,
+        },
+        shippingFee,
+        discount: 0,
+        paymentMethod,
+      })).unwrap();
+
       dispatch(clearCart(currentUser._id));
-      router.push("/orders");
+      router.push(`/my-account/order-history/${result.order._id}`);
+    } catch (error) {
+      console.error("Create order failed:", error);
+      alert(typeof error === "string" ? error : "Không thể tạo đơn hàng. Vui lòng thử lại.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
   // render
-  if (loading)
-    return <div className={styles.loading}>Đang tải giỏ hàng...</div>;
+  if (!authInitialized || !currentUser) {
+    return (
+      <main className={styles.page}>
+        <section className={styles.shoppingCart}>
+          <div className={styles.loading}>
+            <span className={styles.spinner} />
+            <p>Đang kiểm tra đăng nhập...</p>
+          </div>
+        </section>
+      </main>
+    );
+  }
 
-  if (!cart.length) return <div className={styles.empty}>Giỏ hàng trống</div>;
+  if (loading) {
+    return (
+      <main className={styles.page}>
+        <section className={styles.shoppingCart}>
+          <div className={styles.loading}>
+            <span className={styles.spinner} />
+            <p>Đang tải giỏ hàng...</p>
+          </div>
+        </section>
+      </main>
+    );
+  }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.shoppingCart}>
-        <h2>Giỏ hàng</h2>
-
-        {itemsWithTotal.map((item) => (
-          <div
-            key={`${item.productId}-${item.size}-${item.color}`}
-            className={styles.cardItem}
-          >
-            <div className={styles.card}>
-              <Image
-                src={item.image}
-                alt={item.name}
-                width={110}
-                height={110}
-              />
-
-              <div className={styles.info}>
-                <h4>{item.name}</h4>
-                <span>{item.color}</span>
-                <p>{item.price.toLocaleString()} đ</p>
-              </div>
-
-              <div className={styles.actions}>
-                <button
-                  onClick={() =>
-                    handleQuantityChange(
-                      item.productId,
-                      item.size,
-                      item.color,
-                      item.quantity - 1,
-                    )
-                  }
-                >
-                  –
-                </button>
-
-                <span>{item.quantity}</span>
-
-                <button
-                  onClick={() =>
-                    handleQuantityChange(
-                      item.productId,
-                      item.size,
-                      item.color,
-                      item.quantity + 1,
-                    )
-                  }
-                >
-                  +
-                </button>
-
-                <Trash
-                  size={18}
-                  onClick={() =>
-                    handleRemoveItem(item.productId, item.size, item.color)
-                  }
-                />
-              </div>
-            </div>
-
-            <div className={styles.shippingRow}>
-              <span>Phí vận chuyển: {item.shipping.toLocaleString()} đ</span>
-              <span>Thành tiền: {item.itemTotal.toLocaleString()} đ</span>
-            </div>
+    <main className={styles.page}>
+      <section className={styles.shoppingCart}>
+        <div className={styles.heading}>
+          <div>
+            <span className={styles.eyebrow}>KIỂM TRA SẢN PHẨM</span>
+            <h2>Giỏ hàng</h2>
+            <p className={styles.subtitle}>
+              {cart.length
+                ? `${cart.length} sản phẩm trong giỏ hàng của bạn`
+                : "Các sản phẩm bạn chọn sẽ xuất hiện tại đây"}
+            </p>
           </div>
-        ))}
-
-        <div className={styles.footer}>
-          <h4>Tổng cộng: {grandTotal.toLocaleString()} đ</h4>
-
-          <button onClick={handleClearCart}>Xóa giỏ hàng</button>
-          <button onClick={handleSubmitOrder}>Đặt hàng</button>
         </div>
-      </div>
-    </div>
+
+        {!cart.length ? (
+          <div className={styles.empty}>
+            <div className={styles.emptyIcon}>
+              <ShoppingBagIcon />
+            </div>
+            <h3>Giỏ hàng đang trống</h3>
+            <p>Hãy khám phá các sản phẩm và chọn món đồ bạn yêu thích nhé.</p>
+            <button
+              type="button"
+              className={styles.continueButton}
+              onClick={() => router.push("/")}
+            >
+              Tiếp tục mua sắm
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className={styles.items}>
+              {itemsWithTotal.map((item) => (
+                <article
+                  key={`${item.productId}-${item.size}-${item.color}`}
+                  className={styles.cardItem}
+                >
+                  <div className={styles.card}>
+                    <div className={styles.imageWrap}>
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        width={120}
+                        height={120}
+                        className={styles.image}
+                      />
+                    </div>
+
+                    <div className={styles.info}>
+                      <h3 className={styles.name}>{item.name}</h3>
+                      <div className={styles.variantList}>
+                        {item.size && (
+                          <span className={styles.variant}>
+                            Kích thước: {item.size}
+                          </span>
+                        )}
+                        {item.color && (
+                          <span className={styles.variant}>
+                            Màu sắc: {item.color}
+                          </span>
+                        )}
+                      </div>
+                      <p className={styles.price}>
+                        {Number(item.price).toLocaleString("vi-VN")} ₫
+                      </p>
+                    </div>
+
+                    <div className={styles.itemActions}>
+                      <div className={styles.quantityControl}>
+                        <button
+                          type="button"
+                          className={styles.qtyBtn}
+                          aria-label="Giảm số lượng"
+                          disabled={item.quantity <= 1}
+                          onClick={() =>
+                            handleQuantityChange(
+                              item.productId,
+                              item.size,
+                              item.color,
+                              item.quantity - 1,
+                            )
+                          }
+                        >
+                          −
+                        </button>
+                        <span className={styles.qtyValue}>{item.quantity}</span>
+                        <button
+                          type="button"
+                          className={styles.qtyBtn}
+                          aria-label="Tăng số lượng"
+                          onClick={() =>
+                            handleQuantityChange(
+                              item.productId,
+                              item.size,
+                              item.color,
+                              item.quantity + 1,
+                            )
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        className={styles.removeBtn}
+                        aria-label={`Xóa ${item.name}`}
+                        onClick={() =>
+                          handleRemoveItem(
+                            item.productId,
+                            item.size,
+                            item.color,
+                          )
+                        }
+                      >
+                        <Trash size={18} />
+                        <span>Xóa</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className={styles.shippingRow}>
+                    <span>Phí vận chuyển</span>
+                    <strong>{item.shipping.toLocaleString("vi-VN")} ₫</strong>
+                    <span className={styles.lineTotalLabel}>Thành tiền</span>
+                    <strong className={styles.lineTotal}>
+                      {item.itemTotal.toLocaleString("vi-VN")} ₫
+                    </strong>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <div className={styles.summary}>
+              <div className={styles.summaryInfo}>
+                <span className={styles.summaryLabel}>Tổng thanh toán</span>
+                <strong className={styles.summaryAmount}>
+                  {grandTotal.toLocaleString("vi-VN")} ₫
+                </strong>
+                <span className={styles.note}>
+                  Đã bao gồm phí vận chuyển ước tính
+                </span>
+              </div>
+              <div className={styles.paymentChoice}>
+                <label htmlFor="cart-payment-method">Phương thức thanh toán</label>
+                <select
+                  id="cart-payment-method"
+                  value={paymentMethod}
+                  onChange={(event) => setPaymentMethod(event.target.value as PaymentMethod)}
+                >
+                  <option value="cod">Thanh toán khi nhận hàng (COD)</option>
+                  <option value="bank_transfer">Chuyển khoản ngân hàng</option>
+                </select>
+              </div>
+              <button
+                type="button"
+                className={styles.order}
+                onClick={handleSubmitOrder}
+                disabled={submitting}
+              >
+                {submitting ? "Đang tạo đơn..." : "Đặt hàng"}
+              </button>
+            </div>
+          </>
+        )}
+      </section>
+    </main>
   );
 };
 

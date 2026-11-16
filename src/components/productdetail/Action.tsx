@@ -3,10 +3,11 @@
 import React, { useCallback } from "react";
 import styles from "./styles/Action.module.css";
 import { useSelector, useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { addToCart } from "@/store/cartSlice";
 import type { RootState, AppDispatch } from "@/store/store";
 import type { SelectingOrder } from "@/type/SelectingOrder";
+import { mapSelectingOrderToCartItem } from "@/mapper/cart.mapper";
 
 /* ===================== TYPES ===================== */
 
@@ -25,31 +26,26 @@ const Action: React.FC<ActionProps> = ({
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
+  const pathname = usePathname();
 
   const currentUser = useSelector((state: RootState) => state.login.user);
-
-  const fullAddress = currentUser?.fullAddress ?? "";
 
   /* ===================== HANDLERS ===================== */
 
   const handleSubmit = useCallback(async () => {
     if (!currentUser) {
-      router.push("/auth");
+      const returnTo = pathname || "/";
+      router.push(`/auth?returnTo=${encodeURIComponent(returnTo)}`);
       return;
     }
 
-    if (!fullAddress) {
-      router.push("/account-settings/personal-infomation");
-      return;
-    }
-
-    if (!selectingOrder) return; // 🔒 null-safe
+    if (!selectingOrder) return;
 
     try {
       await dispatch(
         addToCart({
           userId: currentUser._id,
-          items: [selectingOrder],
+          items: [mapSelectingOrderToCartItem(selectingOrder)],
         }),
       ).unwrap();
 
@@ -57,7 +53,7 @@ const Action: React.FC<ActionProps> = ({
     } catch (err) {
       console.error("Error when adding to cart", err);
     }
-  }, [currentUser, fullAddress, selectingOrder, dispatch, router]);
+  }, [currentUser, selectingOrder, dispatch, router, pathname]);
 
   /* ===================== RENDER ===================== */
 

@@ -1,0 +1,11 @@
+.page { width:min(100%,1200px); margin:30px auto; padding:0 18px 50px; font-family:sans-serif; color:#292929; }
+.page header { display:flex; justify-content:space-between; align-items:center; gap:15px; margin-bottom:22px; }
+.page h1 { margin:0 0 6px; font-size:25px; }.page header p { margin:0; color:#777; font-size:13px; }
+.page button { padding:9px 13px; border:0; border-radius:4px; background:#bd7139; color:#fff; cursor:pointer; }
+.page button:disabled { opacity:.6; cursor:wait; }
+.tableWrap { overflow-x:auto; border:1px solid #e8e8e8; border-radius:7px; background:#fff; }
+.page table { width:100%; border-collapse:collapse; min-width:800px; font-size:13px; }
+.page th,.page td { padding:14px 12px; border-bottom:1px solid #eee; text-align:left; white-space:nowrap; }
+.page th { background:#fafafa; color:#777; font-weight:600; }
+.actions { display:flex; align-items:center; gap:10px; }.actions a { color:#ad642e; text-decoration:none; }
+.actions button { font-size:11px; }.error { color:#c0392b; }.empty { padding:30px; text-align:center; color:#888; }

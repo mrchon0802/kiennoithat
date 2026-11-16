@@ -9,9 +9,11 @@ export interface LoginPayload {
 }
 
 export interface CreateUserPayload {
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
-  fullName?: string;
+  phoneNumber?: string;
 }
 
 export interface UpdateUserPayload {

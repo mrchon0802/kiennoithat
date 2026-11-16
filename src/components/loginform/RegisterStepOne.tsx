@@ -69,7 +69,9 @@ const RegisterStepOne: React.FC<RegisterStepOneProps> = ({ onNext }) => {
   const onSubmit: SubmitHandler<RegisterStepOneValues> = (data) => {
     dispatch(updateRegisterForm(data));
     onNext?.();
-    router.push("/auth/register/step-2");
+    const returnTo = new URLSearchParams(window.location.search).get("returnTo");
+    const query = returnTo ? `?returnTo=${encodeURIComponent(returnTo)}` : "";
+    router.push(`/auth/register/step-2${query}`);
   };
 
   return (

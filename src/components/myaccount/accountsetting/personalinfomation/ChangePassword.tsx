@@ -64,11 +64,7 @@ const ChangePassword: React.FC = () => {
   const validatePassword = (value: string): string[] => {
     const rules: string[] = [];
 
-    if (value.length < 8) rules.push("Tối thiểu 8 ký tự");
-    if (!/[a-zA-Z]/.test(value))
-      rules.push("Tối thiểu một chữ cái (a–z hoặc A–Z)");
-    if (!/[0-9]/.test(value)) rules.push("Tối thiểu một chữ số (0–9)");
-    if (!/[^a-zA-Z0-9]/.test(value)) rules.push("Tối thiểu một ký tự đặc biệt");
+    if (value.length < 8) rules.push("Mật khẩu phải có ít nhất 8 ký tự");
 
     return rules;
   };

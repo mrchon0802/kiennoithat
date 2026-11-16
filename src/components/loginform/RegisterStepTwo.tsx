@@ -41,11 +41,7 @@ const schema: yup.ObjectSchema<RegisterStepTwoValues> = yup.object({
   password: yup
     .string()
     .required("Vui lòng nhập mật khẩu")
-    .min(8, "Mật khẩu phải có ít nhất 8 kí tự")
-    .matches(/[A-Z]/, "Mật khẩu phải có ít nhất 1 chữ hoa")
-    .matches(/[a-z]/, "Mật khẩu phải có ít nhất 1 chữ thường")
-    .matches(/[0-9]/, "Mật khẩu phải có ít nhất 1 số")
-    .matches(/[@$!%*?&]/, "Mật khẩu phải có ít nhất 1 ký tự đặc biệt"),
+    .min(8, "Mật khẩu phải có ít nhất 8 ký tự"),
   confirmPassword: yup
     .string()
     .required("Vui lòng nhập lại mật khẩu")
@@ -115,7 +111,9 @@ const RegisterStepTwo: React.FC = () => {
     const { confirmPassword, ...importantData } = data;
     dispatch(updateRegisterForm(importantData));
 
-    router.push("/auth/register/step-3");
+    const returnTo = new URLSearchParams(window.location.search).get("returnTo");
+    const query = returnTo ? `?returnTo=${encodeURIComponent(returnTo)}` : "";
+    router.push(`/auth/register/step-3${query}`);
   };
 
   return (

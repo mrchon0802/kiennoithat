@@ -71,7 +71,12 @@ const LoginForm: React.FC = () => {
         password: data.password,
       });
       dispatch(loginSuccess(res.data));
-      router.push("/my-account");
+      const requestedReturnTo = new URLSearchParams(window.location.search).get("returnTo");
+      const returnTo =
+        requestedReturnTo && requestedReturnTo.startsWith("/") && !requestedReturnTo.startsWith("//")
+          ? requestedReturnTo
+          : "/my-account";
+      router.replace(returnTo);
     } catch (err: any) {
       const msg =
         err?.response?.data?.message || "Email hoặc mật khẩu không đúng";

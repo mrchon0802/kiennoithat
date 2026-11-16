@@ -9,6 +9,7 @@ const initialState: LoginState = {
   emailLogin: "",
   loading: false,
   error: null,
+  initialized: false,
 };
 
 /* ===================== SLICE ===================== */
@@ -35,6 +36,7 @@ const loginSlice = createSlice({
       >,
     ) {
       state.loading = false;
+      state.initialized = true;
 
       if ("user" in action.payload) {
         state.user = action.payload.user;
@@ -58,10 +60,16 @@ const loginSlice = createSlice({
       state.token = null;
       state.loading = false;
       state.error = null;
+      state.initialized = true;
 
       if (typeof window !== "undefined") {
         localStorage.removeItem("auth");
       }
+    },
+
+    /** Session restoration has completed. */
+    authInitialized(state) {
+      state.initialized = true;
     },
 
     /** Save email for pre-login step */
@@ -73,7 +81,7 @@ const loginSlice = createSlice({
 
 /* ===================== EXPORT ===================== */
 
-export const { loginStart, loginSuccess, loginFailure, logout, setEmailLogin } =
+export const { loginStart, loginSuccess, loginFailure, logout, setEmailLogin, authInitialized } =
   loginSlice.actions;
 
 export default loginSlice.reducer;
